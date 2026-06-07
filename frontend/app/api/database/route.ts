@@ -1,27 +1,8 @@
-import AutoescolaApp from "./AutoescolaApp";
-import type { ModuleId } from "./AutoescolaApp";
+import { NextResponse } from "next/server";
 import { readDatabase } from "@/lib/store";
 import type { DashboardStats } from "@/lib/types";
 
-function isModuleId(value: string | undefined): value is ModuleId {
-  return [
-    "dashboard",
-    "students",
-    "lessons",
-    "enrollments",
-    "instructors",
-    "vehicles",
-    "payments",
-  ].includes(value ?? "");
-}
-
-export default async function Home({
-  searchParams,
-}: {
-  searchParams: Promise<{ mod?: string }>;
-}) {
-  const params = await searchParams;
-  const initialModule = isModuleId(params.mod) ? params.mod : "dashboard";
+export async function GET() {
   const database = await readDatabase();
   const today = new Date().toISOString().slice(0, 10);
 
@@ -40,5 +21,5 @@ export default async function Home({
     ).length,
   };
 
-  return <AutoescolaApp initialData={{ ...database, stats }} initialModule={initialModule} />;
+  return NextResponse.json({ ...database, stats });
 }
