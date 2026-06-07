@@ -1,8 +1,15 @@
 import StudentPortal from "../StudentPortal";
-import { readDatabase } from "@/lib/store";
+import type { Database } from "@/lib/types";
+
+const emptyPortalData: Database = {
+  students: [],
+  instructors: [],
+  vehicles: [],
+  enrollments: [],
+  lessons: [],
+  payments: [],
+};
 
 export default async function AlunosPage() {
-  const database = await readDatabase();
-
-  return <StudentPortal initialData={database} />;
+  return <StudentPortal initialData={emptyPortalData} />;
 }

@@ -6,9 +6,10 @@ import {
   CreditCard,
   GraduationCap,
   LogOut,
+  RefreshCw,
   UserRound,
 } from "lucide-react";
-import { ReactNode, useMemo, useState } from "react";
+import { FormEvent, ReactNode, useCallback, useEffect, useMemo, useState } from "react";
 import type { Database, Enrollment, Lesson, Payment, Student } from "@/lib/types";
 
 type StudentPortalData = Database;
@@ -44,11 +45,119 @@ function getVehicleName(data: Database, id: string) {
   return data.vehicles.find((vehicle) => vehicle.id === id)?.modelo ?? "Veiculo";
 }
 
-export default function StudentPortal({ initialData }: { initialData: StudentPortalData }) {
-  const data = initialData;
-  const [studentId, setStudentId] = useState(initialData.students[0]?.id ?? "");
+function requestJson<T>(
+  url: string,
+  options: { body?: unknown; method: "GET" | "POST" },
+) {
+  return new Promise<T>((resolve, reject) => {
+    const request = new XMLHttpRequest();
+    request.open(options.method, url);
+    request.setRequestHeader("Content-Type", "application/json");
 
-  const student = data.students.find((item) => item.id === studentId) ?? data.students[0];
+    request.onload = () => {
+      const response = request.responseText ? JSON.parse(request.responseText) : {};
+
+      if (request.status >= 200 && request.status < 300) {
+        resolve(response as T);
+        return;
+      }
+
+      reject(new Error((response as { message?: string }).message ?? "Falha no acesso."));
+    };
+
+    request.onerror = () => reject(new Error("Falha de rede."));
+    request.send(options.body ? JSON.stringify(options.body) : undefined);
+  });
+}
+
+export default function StudentPortal({ initialData }: { initialData: StudentPortalData }) {
+  const [data, setData] = useState<StudentPortalData>(initialData);
+  const [studentId, setStudentId] = useState(() => {
+    if (typeof window === "undefined") {
+      return "";
+    }
+
+    return window.sessionStorage.getItem("studentId") ?? "";
+  });
+  const [loginError, setLoginError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [lastUpdate, setLastUpdate] = useState("");
+
+  const student = studentId
+    ? data.students.find((item) => item.id === studentId) ?? null
+    : null;
+
+  const loadStudentData = useCallback(async (nextStudentId: string) => {
+    const nextData = await requestJson<StudentPortalData>(
+      `/api/student-portal?studentId=${encodeURIComponent(nextStudentId)}`,
+      { method: "GET" },
+    );
+    setData(nextData);
+    setLastUpdate(new Date().toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" }));
+  }, []);
+
+  async function handleLogin(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setLoading(true);
+    setLoginError("");
+
+    try {
+      const form = new FormData(event.currentTarget);
+      const auth = await requestJson<{ studentId: string; studentName: string }>(
+        "/api/student-auth",
+        {
+          method: "POST",
+          body: {
+            cpf: String(form.get("cpf")),
+            email: String(form.get("email")),
+          },
+        },
+      );
+
+      window.sessionStorage.setItem("studentId", auth.studentId);
+      setStudentId(auth.studentId);
+      await loadStudentData(auth.studentId);
+    } catch (error) {
+      setLoginError(error instanceof Error ? error.message : "Falha no acesso.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  function handleLogout() {
+    window.sessionStorage.removeItem("studentId");
+    setStudentId("");
+    setData(initialData);
+    setLastUpdate("");
+  }
+
+  useEffect(() => {
+    if (studentId) {
+      const timeout = window.setTimeout(() => {
+        loadStudentData(studentId).catch(() => {
+          window.sessionStorage.removeItem("studentId");
+          setStudentId("");
+        });
+      }, 0);
+
+      return () => window.clearTimeout(timeout);
+    }
+  }, [loadStudentData, studentId]);
+
+  useEffect(() => {
+    if (!studentId) {
+      return;
+    }
+
+    const interval = window.setInterval(() => {
+      loadStudentData(studentId).catch(() => {
+        window.sessionStorage.removeItem("studentId");
+        setStudentId("");
+      });
+    }, 5000);
+
+    return () => window.clearInterval(interval);
+  }, [loadStudentData, studentId]);
 
   const studentLessons = useMemo(
     () =>
@@ -66,12 +175,68 @@ export default function StudentPortal({ initialData }: { initialData: StudentPor
     .filter((payment) => payment.status !== "pago")
     .reduce((sum, payment) => sum + payment.valor, 0);
 
+  if (studentId && !student) {
+    return (
+      <main className="grid min-h-screen place-items-center bg-slate-100 p-4 text-slate-900">
+        <section className="w-full max-w-md rounded-lg border border-slate-200 bg-white p-6 text-center shadow-sm">
+          <RefreshCw className="mx-auto mb-4 animate-spin text-[#003B95]" size={28} />
+          <h1 className="text-2xl font-black text-[#003B95]">Carregando area do aluno</h1>
+          <p className="mt-2 text-sm font-semibold text-slate-500">
+            Buscando sua escala atualizada.
+          </p>
+        </section>
+      </main>
+    );
+  }
+
   if (!student) {
     return (
-      <main className="grid min-h-screen place-items-center bg-slate-100 p-6 text-slate-900">
-        <Panel title="Area do aluno">
-          <p className="font-semibold text-slate-600">Nenhum aluno cadastrado.</p>
-        </Panel>
+      <main className="grid min-h-screen place-items-center bg-slate-100 p-4 text-slate-900">
+        <section className="w-full max-w-md rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
+          <p className="text-xs font-black uppercase tracking-[0.18em] text-[#003B95]/70">
+            Dirija Melhor
+          </p>
+          <h1 className="mt-2 text-3xl font-black text-[#003B95]">Area do aluno</h1>
+          <p className="mt-2 text-sm font-semibold leading-6 text-slate-500">
+            Entre com CPF e e-mail cadastrados para acompanhar sua escala em tempo real.
+          </p>
+
+          <form className="mt-6 grid gap-4" onSubmit={handleLogin}>
+            <label className="grid gap-1.5 text-sm font-bold text-slate-700">
+              CPF
+              <input
+                className="h-11 rounded-md border border-slate-200 px-3 text-sm font-semibold outline-none focus:border-[#003B95] focus:ring-2 focus:ring-[#003B95]/15"
+                name="cpf"
+                placeholder="000.000.000-00"
+                required
+              />
+            </label>
+            <label className="grid gap-1.5 text-sm font-bold text-slate-700">
+              E-mail
+              <input
+                className="h-11 rounded-md border border-slate-200 px-3 text-sm font-semibold outline-none focus:border-[#003B95] focus:ring-2 focus:ring-[#003B95]/15"
+                name="email"
+                placeholder="aluno@email.com"
+                required
+                type="email"
+              />
+            </label>
+
+            {loginError ? (
+              <p className="rounded-md bg-rose-50 px-3 py-2 text-sm font-bold text-rose-700">
+                {loginError}
+              </p>
+            ) : null}
+
+            <button
+              className="h-11 rounded-md bg-[#003B95] text-sm font-black text-white hover:bg-[#002f78]"
+              disabled={loading}
+              type="submit"
+            >
+              {loading ? "Entrando..." : "Entrar"}
+            </button>
+          </form>
+        </section>
       </main>
     );
   }
@@ -87,29 +252,25 @@ export default function StudentPortal({ initialData }: { initialData: StudentPor
             <h1 className="mt-1 text-2xl font-black text-[#FFD000]">Area do aluno</h1>
           </div>
           <div className="flex flex-wrap items-center gap-3">
-            <label className="grid gap-1 text-xs font-bold text-white/75">
-              Acessando como
-              <select
-                className="h-10 rounded-md border border-white/20 bg-white px-3 text-sm font-bold text-[#003B95] outline-none"
-                onChange={(event) => {
-                  setStudentId(event.target.value);
-                }}
-                value={student.id}
-              >
-                {data.students.map((item) => (
-                  <option key={item.id} value={item.id}>
-                    {item.nome}
-                  </option>
-                ))}
-              </select>
-            </label>
+            <span className="inline-flex h-10 items-center gap-2 rounded-md bg-white/10 px-3 text-sm font-bold">
+              <RefreshCw size={16} />
+              {lastUpdate ? `Atualizado ${lastUpdate}` : "Atualizando escala"}
+            </span>
             <Link
               className="inline-flex h-10 items-center gap-2 rounded-md bg-white/10 px-3 text-sm font-bold hover:bg-white/15"
               href="/"
             >
-              <LogOut size={17} />
+              <UserRound size={17} />
               Administracao
             </Link>
+            <button
+              className="inline-flex h-10 items-center gap-2 rounded-md bg-white px-3 text-sm font-black text-[#003B95] hover:bg-white/90"
+              onClick={handleLogout}
+              type="button"
+            >
+              <LogOut size={17} />
+              Sair
+            </button>
           </div>
         </div>
       </header>
