@@ -1,8 +1,91 @@
 import { promises as fs } from "fs";
 import path from "path";
-import type { CollectionName, Database } from "./types";
+import type { CollectionName, Database, Lesson } from "./types";
 
 const dataPath = path.join(process.cwd(), "data", "db.json");
+
+const scaleStart = new Date("2026-06-09T00:00:00");
+const scaleEnd = new Date("2026-06-30T00:00:00");
+
+const lessonScale = [
+  {
+    instructorId: "ins-renan",
+    vehicleId: "veh-onix",
+    weekdays: [1, 2, 3, 4, 5],
+    hours: ["08:00", "09:00", "10:00", "11:00", "13:00", "14:00", "15:00"],
+  },
+  {
+    instructorId: "ins-denner",
+    vehicleId: "veh-argo-manual",
+    weekdays: [1, 2, 3, 4, 5],
+    hours: ["08:00", "09:00", "10:00", "11:00", "14:00", "15:00", "16:00", "17:00"],
+  },
+  {
+    instructorId: "ins-denner",
+    vehicleId: "veh-argo-manual",
+    weekdays: [6],
+    hours: ["07:00", "08:00", "09:00", "10:00", "11:00"],
+  },
+  {
+    instructorId: "ins-leo",
+    vehicleId: "veh-argo-auto",
+    weekdays: [6],
+    hours: ["07:00", "08:00", "09:00", "10:00", "11:00"],
+  },
+];
+
+const lessonOverrides = new Map<string, Pick<Lesson, "id" | "status"> & { alunoId?: string }>([
+  [
+    "2026-06-10|ins-renan|09:00",
+    { id: "lesson-renan-2026-06-10-09-00", status: "solicitada", alunoId: "stu-ana" },
+  ],
+  [
+    "2026-06-10|ins-denner|10:00",
+    {
+      id: "lesson-denner-2026-06-10-10-00",
+      status: "cancelamento_solicitado",
+      alunoId: "stu-ana",
+    },
+  ],
+  [
+    "2026-06-13|ins-leo|09:00",
+    { id: "lesson-leo-2026-06-13-09-00", status: "agendada", alunoId: "stu-bianca" },
+  ],
+]);
+
+function dateKey(date: Date) {
+  return date.toISOString().slice(0, 10);
+}
+
+function buildSeedLessons(): Lesson[] {
+  const lessons: Lesson[] = [];
+
+  for (const date = new Date(scaleStart); date <= scaleEnd; date.setDate(date.getDate() + 1)) {
+    const data = dateKey(date);
+
+    for (const scale of lessonScale) {
+      if (!scale.weekdays.includes(date.getDay())) {
+        continue;
+      }
+
+      for (const hora of scale.hours) {
+        const override = lessonOverrides.get(`${data}|${scale.instructorId}|${hora}`);
+        lessons.push({
+          id: override?.id ?? `lesson-${scale.instructorId.replace("ins-", "")}-${data}-${hora.replace(":", "-")}`,
+          alunoId: override?.alunoId,
+          instrutorId: scale.instructorId,
+          veiculoId: scale.vehicleId,
+          data,
+          hora,
+          tipo: "Pratica",
+          status: override?.status ?? "disponivel",
+        });
+      }
+    }
+  }
+
+  return lessons;
+}
 
 const seed: Database = {
   students: [
@@ -22,7 +105,7 @@ const seed: Database = {
       cpf: "987.654.321-00",
       telefone: "(21) 98877-6611",
       email: "carlos.lima@email.com",
-      categoria: "AB",
+      categoria: "B",
       status: "pendente",
       aulasRealizadas: 3,
     },
@@ -32,24 +115,31 @@ const seed: Database = {
       cpf: "456.781.239-10",
       telefone: "(21) 97744-2800",
       email: "bianca.rocha@email.com",
-      categoria: "A",
+      categoria: "B",
       status: "ativo",
       aulasRealizadas: 11,
     },
   ],
   instructors: [
     {
-      id: "ins-marcos",
-      nome: "Marcos Pereira",
+      id: "ins-renan",
+      nome: "Renan",
       telefone: "(21) 99240-1414",
-      categorias: "A, B",
+      categorias: "B",
       status: "ativo",
     },
     {
-      id: "ins-luciana",
-      nome: "Luciana Alves",
+      id: "ins-denner",
+      nome: "Denner",
       telefone: "(21) 98320-2200",
-      categorias: "B, D",
+      categorias: "B",
+      status: "ativo",
+    },
+    {
+      id: "ins-leo",
+      nome: "Leo",
+      telefone: "(21) 97777-3300",
+      categorias: "B",
       status: "ativo",
     },
   ],
@@ -59,21 +149,24 @@ const seed: Database = {
       modelo: "Chevrolet Onix",
       placa: "RJA-4B28",
       categoria: "B",
+      cambio: "manual",
       status: "disponivel",
     },
     {
-      id: "veh-moto",
-      modelo: "Honda CG 160",
-      placa: "LPR-8A10",
-      categoria: "A",
-      status: "aula",
-    },
-    {
-      id: "veh-argo",
+      id: "veh-argo-manual",
       modelo: "Fiat Argo",
       placa: "KWD-3C92",
       categoria: "B",
-      status: "manutencao",
+      cambio: "manual",
+      status: "disponivel",
+    },
+    {
+      id: "veh-argo-auto",
+      modelo: "Fiat Argo",
+      placa: "LRT-6A41",
+      categoria: "B",
+      cambio: "automatico",
+      status: "disponivel",
     },
   ],
   enrollments: [
@@ -88,34 +181,13 @@ const seed: Database = {
     {
       id: "enr-carlos",
       alunoId: "stu-carlos",
-      curso: "Primeira habilitacao AB",
+      curso: "Direcao para habilitados",
       inicio: "2026-06-05",
       valor: 2100,
       status: "pendente",
     },
   ],
-  lessons: [
-    {
-      id: "les-ana-hoje",
-      alunoId: "stu-ana",
-      instrutorId: "ins-marcos",
-      veiculoId: "veh-onix",
-      data: new Date().toISOString().slice(0, 10),
-      hora: "09:00",
-      tipo: "Pratica",
-      status: "agendada",
-    },
-    {
-      id: "les-bianca-hoje",
-      alunoId: "stu-bianca",
-      instrutorId: "ins-marcos",
-      veiculoId: "veh-moto",
-      data: new Date().toISOString().slice(0, 10),
-      hora: "14:30",
-      tipo: "Pratica",
-      status: "agendada",
-    },
-  ],
+  lessons: buildSeedLessons(),
   payments: [
     {
       id: "pay-ana-1",

@@ -1,23 +1,18 @@
 import { NextResponse } from "next/server";
 import { readDatabase } from "@/lib/store";
-
-function onlyDigits(value: string) {
-  return value.replace(/\D/g, "");
-}
+import { getStudentInitialPassword } from "@/lib/types";
 
 export async function POST(request: Request) {
-  const body = (await request.json()) as { cpf?: string; email?: string };
-  const cpf = onlyDigits(body.cpf ?? "");
+  const body = (await request.json()) as { email?: string; password?: string };
   const email = (body.email ?? "").trim().toLowerCase();
+  const password = (body.password ?? "").trim().toLowerCase();
   const database = await readDatabase();
 
-  const student = database.students.find(
-    (item) => onlyDigits(item.cpf) === cpf && item.email.toLowerCase() === email,
-  );
+  const student = database.students.find((item) => item.email.toLowerCase() === email);
 
-  if (!student) {
+  if (!student || getStudentInitialPassword(student) !== password) {
     return NextResponse.json(
-      { message: "CPF ou e-mail invalido." },
+      { message: "E-mail ou senha invalido." },
       { status: 401 },
     );
   }

@@ -19,7 +19,7 @@ export async function GET(request: Request) {
     instructors: database.instructors,
     vehicles: database.vehicles,
     enrollments: database.enrollments.filter((item) => item.alunoId === student.id),
-    lessons: database.lessons.filter((item) => item.alunoId === student.id),
+    lessons: database.lessons,
     payments: database.payments.filter((item) => item.alunoId === student.id),
   });
 }

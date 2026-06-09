@@ -8,6 +8,8 @@ import {
   CalendarDays,
   Car,
   CheckCircle2,
+  ChevronLeft,
+  ChevronRight,
   ClipboardList,
   CreditCard,
   GraduationCap,
@@ -34,6 +36,7 @@ import type {
   Student,
   Vehicle,
 } from "@/lib/types";
+import { getStudentInitialPassword } from "@/lib/types";
 
 type DatabaseResponse = Database & {
   stats: DashboardStats;
@@ -62,7 +65,7 @@ const navItems = [
 
 const moduleTitles: Record<ModuleId, string> = {
   dashboard: "Painel da autoescola",
-  students: "Cadastro de alunos",
+  students: "Consulta de alunos",
   lessons: "Agenda de aulas",
   enrollments: "Matriculas",
   instructors: "Instrutores",
@@ -111,7 +114,78 @@ function getInstructorName(instructors: Instructor[], id: string) {
 }
 
 function getVehicleName(vehicles: Vehicle[], id: string) {
-  return vehicles.find((vehicle) => vehicle.id === id)?.modelo ?? "Veiculo";
+  const vehicle = vehicles.find((item) => item.id === id);
+  return vehicle ? `${vehicle.modelo} ${vehicle.cambio}` : "Veiculo";
+}
+
+function getLessonCardTone(status: Lesson["status"]) {
+  if (status === "disponivel") {
+    return {
+      accent: "bg-emerald-500",
+      card: "border-emerald-200 bg-emerald-50",
+      text: "text-emerald-800",
+    };
+  }
+
+  if (status === "agendada") {
+    return {
+      accent: "bg-[#003B95]",
+      card: "border-blue-200 bg-blue-50",
+      text: "text-[#003B95]",
+    };
+  }
+
+  if (status === "cancelamento_solicitado" || status === "cancelada") {
+    return {
+      accent: "bg-rose-500",
+      card: "border-rose-200 bg-rose-50",
+      text: "text-rose-800",
+    };
+  }
+
+  return {
+    accent: "bg-amber-500",
+    card: "border-amber-200 bg-amber-50",
+    text: "text-amber-800",
+  };
+}
+
+function getLessonStudentName(students: Student[], lesson: Lesson) {
+  return lesson.alunoId ? getStudentName(students, lesson.alunoId) : "Horario disponivel";
+}
+
+function formatDate(value: string) {
+  return new Date(`${value}T00:00:00`).toLocaleDateString("pt-BR", {
+    day: "2-digit",
+    month: "2-digit",
+    weekday: "long",
+    year: "numeric",
+  });
+}
+
+const weekDays = ["domingo", "segunda", "terca", "quarta", "quinta", "sexta", "sabado"];
+
+function formatMonth(value: Date) {
+  return value.toLocaleDateString("pt-BR", {
+    month: "long",
+    year: "numeric",
+  });
+}
+
+function toDateKey(value: Date) {
+  return value.toISOString().slice(0, 10);
+}
+
+function getMonthGrid(month: Date) {
+  const firstDay = new Date(month.getFullYear(), month.getMonth(), 1);
+  const firstGridDay = new Date(firstDay);
+  firstGridDay.setDate(firstDay.getDate() - firstDay.getDay());
+
+  return Array.from({ length: 42 }, (_, index) => {
+    const date = new Date(firstGridDay);
+    date.setDate(firstGridDay.getDate() + index);
+    return date;
+  });
 }
 
 function normalize(value: string) {
@@ -126,6 +200,7 @@ function StatusPill({ children }: { children: string }) {
     children.includes("pago") ||
     children.includes("ativo") ||
     children.includes("disponivel") ||
+    children.includes("agendada") ||
     children.includes("realizada")
       ? "bg-emerald-50 text-emerald-700 ring-emerald-200"
       : children.includes("atrasado") ||
@@ -273,22 +348,19 @@ export default function AutoescolaApp({
     setSaving(false);
   }
 
-  function handleStudentSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    const form = new FormData(event.currentTarget);
-    const current = editing as Student | null;
-
-    save("students", {
-      id: current?.id ?? "",
-      nome: String(form.get("nome")),
-      cpf: String(form.get("cpf")),
-      telefone: String(form.get("telefone")),
-      email: String(form.get("email")),
-      categoria: String(form.get("categoria")),
-      status: String(form.get("status")),
-      aulasRealizadas: Number(form.get("aulasRealizadas") || 0),
+  function approveLessonRequest(lesson: Lesson) {
+    save("lessons", {
+      id: lesson.id,
+      status: "agendada",
     });
-    event.currentTarget.reset();
+  }
+
+  function releaseLesson(lesson: Lesson) {
+    save("lessons", {
+      id: lesson.id,
+      alunoId: "",
+      status: "disponivel",
+    });
   }
 
   function handleInstructorSubmit(event: FormEvent<HTMLFormElement>) {
@@ -316,24 +388,34 @@ export default function AutoescolaApp({
       modelo: String(form.get("modelo")),
       placa: String(form.get("placa")),
       categoria: String(form.get("categoria")),
+      cambio: String(form.get("cambio")),
       status: String(form.get("status")),
     });
     event.currentTarget.reset();
   }
 
-  function handleEnrollmentSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleEnrollmentSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const form = new FormData(event.currentTarget);
     const current = editing as Enrollment | null;
 
-    save("enrollments", {
-      id: current?.id ?? "",
-      alunoId: String(form.get("alunoId")),
-      curso: String(form.get("curso")),
-      inicio: String(form.get("inicio")),
-      valor: Number(form.get("valor") || 0),
-      status: String(form.get("status")),
+    setSaving(true);
+    await requestJson("/api/enrollment-registration", {
+      method: "POST",
+      body: {
+        id: current?.id ?? "",
+        nome: String(form.get("nome")),
+        cpf: String(form.get("cpf")),
+        email: String(form.get("email")),
+        endereco: String(form.get("endereco")),
+        cambioPreferido: String(form.get("cambioPreferido")),
+        aulasContratadas: Number(form.get("aulasContratadas") || 0),
+        enrollmentStatus: String(form.get("enrollmentStatus")),
+      },
     });
+    await loadData();
+    setEditing(null);
+    setSaving(false);
     event.currentTarget.reset();
   }
 
@@ -344,7 +426,7 @@ export default function AutoescolaApp({
 
     save("lessons", {
       id: current?.id ?? "",
-      alunoId: String(form.get("alunoId")),
+      alunoId: String(form.get("alunoId") ?? ""),
       instrutorId: String(form.get("instrutorId")),
       veiculoId: String(form.get("veiculoId")),
       data: String(form.get("data")),
@@ -373,7 +455,9 @@ export default function AutoescolaApp({
   const filteredStudents = useMemo(() => {
     const term = normalize(query);
     return data.students.filter((student) =>
-      normalize(`${student.nome} ${student.cpf} ${student.telefone}`).includes(term),
+      normalize(`${student.nome} ${student.cpf} ${student.email} ${student.endereco ?? ""}`).includes(
+        term,
+      ),
     );
   }, [data.students, query]);
 
@@ -383,6 +467,21 @@ export default function AutoescolaApp({
 
   const pendingPayments = data.payments.filter((payment) => payment.status !== "pago");
 
+  const aulasAgrupadas = data.lessons
+    .slice()
+    .sort((a, b) => `${a.data} ${a.hora}`.localeCompare(`${b.data} ${b.hora}`))
+    .reduce(
+      (acc, lesson) => {
+        if (!acc[lesson.data]) {
+          acc[lesson.data] = [];
+        }
+
+        acc[lesson.data].push(lesson);
+
+        return acc;
+      },
+      {} as Record<string, Lesson[]>,
+    );
   return (
     <main className="flex min-h-screen bg-slate-100 text-slate-900">
       <aside className="hidden w-72 shrink-0 bg-[#003B95] p-5 text-white lg:flex lg:flex-col">
@@ -538,7 +637,7 @@ export default function AutoescolaApp({
                         <strong className="text-lg text-[#003B95]">{lesson.hora}</strong>
                         <div>
                           <p className="font-bold">
-                            {getStudentName(data.students, lesson.alunoId)}
+                            {getLessonStudentName(data.students, lesson)}
                           </p>
                           <p className="text-sm text-slate-500">
                             {getInstructorName(data.instructors, lesson.instrutorId)} com{" "}
@@ -585,32 +684,39 @@ export default function AutoescolaApp({
               action={
                 <SearchBox
                   onChange={setQuery}
-                  placeholder="Pesquisar por nome, CPF ou telefone"
+                  placeholder="Pesquisar por nome, CPF, e-mail ou endereco"
                   value={query}
                 />
               }
               title="Alunos cadastrados"
             >
-              <StudentForm
-                editing={editing as Student | null}
-                onCancel={() => setEditing(null)}
-                onSubmit={handleStudentSubmit}
-                saving={saving}
-              />
               <Table
-                headers={["Nome", "CPF", "Telefone", "Categoria", "Status", "Acoes"]}
-                rows={filteredStudents.map((student) => [
-                  student.nome,
-                  student.cpf,
-                  student.telefone,
-                  student.categoria,
-                  <StatusPill key="status">{student.status}</StatusPill>,
-                  <RowActions
-                    key="actions"
-                    onDelete={() => remove("students", student.id)}
-                    onEdit={() => setEditing(student)}
-                  />,
-                ])}
+                headers={[
+                  "Nome",
+                  "CPF",
+                  "E-mail",
+                  "Endereco",
+                  "Carro",
+                  "Aulas",
+                  "Acesso",
+                  "Status",
+                ]}
+                rows={filteredStudents.map((student) => {
+                  const enrollment = data.enrollments.find(
+                    (item) => item.alunoId === student.id,
+                  );
+
+                  return [
+                    student.nome,
+                    student.cpf,
+                    student.email,
+                    student.endereco ?? "-",
+                    enrollment?.cambioPreferido ?? "-",
+                    enrollment?.aulasContratadas ?? "-",
+                    <StudentAccessCell key="access" student={student} />,
+                    <StatusPill key="status">{student.status}</StatusPill>,
+                  ];
+                })}
               />
             </Panel>
           ) : null}
@@ -624,29 +730,141 @@ export default function AutoescolaApp({
                 onSubmit={handleLessonSubmit}
                 saving={saving}
               />
+              <AdminScheduleCalendar
+                data={data}
+                lessons={data.lessons}
+                onApprove={approveLessonRequest}
+                onEdit={setEditing}
+                onKeep={approveLessonRequest}
+                onRelease={releaseLesson}
+              />
+              <div className="hidden">
+                {Object.entries(aulasAgrupadas).map(([dataAula, aulas]) => (
+                  <div className="rounded-lg border border-slate-200 bg-slate-50 p-4" key={dataAula}>
+                    <h3 className="mb-4 text-lg font-black text-[#003B95]">
+                      {formatDate(dataAula)}
+                    </h3>
+
+                    <div className="grid gap-3">
+                      {aulas.map((lesson) => (
+                        <div
+                          className="grid gap-3 rounded-md border border-slate-200 bg-white p-4 lg:grid-cols-[90px_1fr_auto] lg:items-center"
+                          key={lesson.id}
+                        >
+                          <strong className="text-lg text-[#003B95]">{lesson.hora}</strong>
+                          <div>
+                            <p className="font-black text-slate-800">
+                              {getLessonStudentName(data.students, lesson)}
+                            </p>
+                            <p className="text-sm font-semibold text-slate-500">
+                              {getInstructorName(data.instructors, lesson.instrutorId)} -{" "}
+                              {getVehicleName(data.vehicles, lesson.veiculoId)}
+                            </p>
+                          </div>
+                          <div className="flex flex-wrap items-center gap-2">
+                            <StatusPill>{lesson.status}</StatusPill>
+                            <AdminLessonActions
+                              lesson={lesson}
+                              onApprove={() => approveLessonRequest(lesson)}
+                              onEdit={() => setEditing(lesson)}
+                              onKeep={() => approveLessonRequest(lesson)}
+                              onRelease={() => releaseLesson(lesson)}
+                            />
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+              {/*
+<div className="mb-8 space-y-6">
+
+  {Object.entries(aulasAgrupadas).map(([dataAula, aulas]) => (
+
+    <div
+      key={dataAula}
+      className="rounded-xl border border-slate-200 bg-slate-50 p-5"
+    >
+      <h3 className="mb-4 text-xl font-bold text-[#003B95]">
+        📅 {new Date(dataAula).toLocaleDateString("pt-BR", {
+  weekday: "long",
+  day: "2-digit",
+  month: "2-digit",
+  year: "numeric",
+})}
+      </h3>
+
+      <div className="grid gap-3">
+
+        {aulas.map((lesson) => (
+
+          <div
+            key={lesson.id}
+            className="flex items-center justify-between rounded-lg border bg-white p-4"
+          >
+            <div>
+
+              <p className="text-lg font-bold">
+                {lesson.hora}
+              </p>
+
+              <p className="text-slate-600">
+                {lesson.alunoId
+                  ? getStudentName(data.students, lesson.alunoId)
+                  : "Horário disponível"}
+              </p>
+
+            </div>
+
+            <div className="flex items-center gap-3">
+
+  <StatusPill>
+    {lesson.status}
+  </StatusPill>
+
+
+</div>
+
+          </div>
+
+        ))}
+
+      </div>
+
+    </div>
+
+  ))}
+
+</div>
+              */}
               <Table
                 headers={["Data", "Hora", "Aluno", "Instrutor", "Veiculo", "Status", "Acoes"]}
                 rows={data.lessons.map((lesson) => [
                   lesson.data,
                   lesson.hora,
-                  getStudentName(data.students, lesson.alunoId),
+                  getLessonStudentName(data.students, lesson),
                   getInstructorName(data.instructors, lesson.instrutorId),
                   getVehicleName(data.vehicles, lesson.veiculoId),
                   <StatusPill key="status">{lesson.status}</StatusPill>,
-                  <RowActions
-                    key="actions"
-                    onDelete={() => remove("lessons", lesson.id)}
-                    onEdit={() => setEditing(lesson)}
-                    onCancel={
-                      lesson.status === "agendada"
-                        ? () =>
-                            save("lessons", {
-                              id: lesson.id,
-                              status: "cancelada",
-                            })
-                        : undefined
-                    }
-                  />,
+                  <div className="flex items-center gap-2" key="actions">
+                    <AdminLessonActions
+                      lesson={lesson}
+                      onApprove={() => approveLessonRequest(lesson)}
+                      onEdit={() => setEditing(lesson)}
+                      onKeep={() => approveLessonRequest(lesson)}
+                      onRelease={() => releaseLesson(lesson)}
+                    />
+                    <button
+                      aria-label="Excluir"
+                      className="grid size-9 place-items-center rounded-md bg-rose-100 text-rose-700 hover:bg-rose-200"
+                      onClick={() => remove("lessons", lesson.id)}
+                      title="Excluir"
+                      type="button"
+                    >
+                      <Trash2 size={16} />
+                    </button>
+                  </div>,
                 ])}
               />
             </Panel>
@@ -662,19 +880,24 @@ export default function AutoescolaApp({
                 saving={saving}
               />
               <Table
-                headers={["Aluno", "Curso", "Inicio", "Valor", "Status", "Acoes"]}
-                rows={data.enrollments.map((enrollment) => [
-                  getStudentName(data.students, enrollment.alunoId),
-                  enrollment.curso,
-                  enrollment.inicio,
-                  currency.format(enrollment.valor),
-                  <StatusPill key="status">{enrollment.status}</StatusPill>,
-                  <RowActions
-                    key="actions"
-                    onDelete={() => remove("enrollments", enrollment.id)}
-                    onEdit={() => setEditing(enrollment)}
-                  />,
-                ])}
+                headers={["Aluno", "E-mail", "CPF", "Carro", "Aulas", "Status", "Acoes"]}
+                rows={data.enrollments.map((enrollment) => {
+                  const student = data.students.find((item) => item.id === enrollment.alunoId);
+
+                  return [
+                    student?.nome ?? "Aluno removido",
+                    student?.email ?? "-",
+                    student?.cpf ?? "-",
+                    enrollment.cambioPreferido ?? "-",
+                    enrollment.aulasContratadas ?? "-",
+                    <StatusPill key="status">{enrollment.status}</StatusPill>,
+                    <RowActions
+                      key="actions"
+                      onDelete={() => remove("enrollments", enrollment.id)}
+                      onEdit={() => setEditing(enrollment)}
+                    />,
+                  ];
+                })}
               />
             </Panel>
           ) : null}
@@ -713,11 +936,12 @@ export default function AutoescolaApp({
                 saving={saving}
               />
               <Table
-                headers={["Modelo", "Placa", "Categoria", "Status", "Acoes"]}
+                headers={["Modelo", "Placa", "Categoria", "Cambio", "Status", "Acoes"]}
                 rows={data.vehicles.map((vehicle) => [
                   vehicle.modelo,
                   vehicle.placa,
                   vehicle.categoria,
+                  vehicle.cambio,
                   <StatusPill key="status">{vehicle.status}</StatusPill>,
                   <RowActions
                     key="actions"
@@ -868,6 +1092,35 @@ function Table({
   );
 }
 
+function StudentAccessCell({ student }: { student: Student }) {
+  const accessPath = `/alunos?email=${encodeURIComponent(student.email)}`;
+  const initialPassword = getStudentInitialPassword(student);
+
+  function copyAccess() {
+    const origin = typeof window === "undefined" ? "" : window.location.origin;
+    const text = `Link de acesso: ${origin}${accessPath}\nSenha inicial: ${initialPassword}`;
+    navigator.clipboard?.writeText(text);
+  }
+
+  return (
+    <div className="grid gap-2 text-xs font-bold text-slate-600">
+      <a className="font-black text-[#003B95] hover:underline" href={accessPath}>
+        Link do aluno
+      </a>
+      <span>
+        Senha: <strong className="text-slate-900">{initialPassword}</strong>
+      </span>
+      <button
+        className="w-fit rounded-md bg-slate-100 px-2 py-1 font-black text-slate-700 hover:bg-slate-200"
+        onClick={copyAccess}
+        type="button"
+      >
+        Copiar acesso
+      </button>
+    </div>
+  );
+}
+
 function RowActions({
   onCancel,
   onDelete,
@@ -912,6 +1165,391 @@ function RowActions({
   );
 }
 
+function AdminScheduleCalendar({
+  data,
+  lessons,
+  onApprove,
+  onEdit,
+  onKeep,
+  onRelease,
+}: {
+  data: Database;
+  lessons: Lesson[];
+  onApprove: (lesson: Lesson) => void;
+  onEdit: (lesson: Lesson) => void;
+  onKeep: (lesson: Lesson) => void;
+  onRelease: (lesson: Lesson) => void;
+}) {
+  const [visibleMonth, setVisibleMonth] = useState(() => {
+    const firstLesson = lessons.slice().sort((a, b) => a.data.localeCompare(b.data))[0];
+    return firstLesson ? new Date(`${firstLesson.data}T00:00:00`) : new Date();
+  });
+  const [selectedInstructorId, setSelectedInstructorId] = useState(
+    () => data.instructors[0]?.id ?? "",
+  );
+  const [selectedDate, setSelectedDate] = useState(() => {
+    const firstLesson = lessons.slice().sort((a, b) => a.data.localeCompare(b.data))[0];
+    return firstLesson?.data ?? toDateKey(new Date());
+  });
+  const calendarDays = getMonthGrid(visibleMonth);
+  const filteredLessons = selectedInstructorId
+    ? lessons.filter((lesson) => lesson.instrutorId === selectedInstructorId)
+    : lessons;
+  const lessonsByDay = filteredLessons.reduce(
+    (acc, lesson) => {
+      if (!acc[lesson.data]) {
+        acc[lesson.data] = [];
+      }
+
+      acc[lesson.data].push(lesson);
+      return acc;
+    },
+    {} as Record<string, Lesson[]>,
+  );
+  const sortedLessons = filteredLessons
+    .slice()
+    .sort((a, b) => `${a.data} ${a.hora}`.localeCompare(`${b.data} ${b.hora}`));
+  const visibleMonthKey = `${visibleMonth.getFullYear()}-${String(
+    visibleMonth.getMonth() + 1,
+  ).padStart(2, "0")}`;
+  const monthLessons = sortedLessons.filter((lesson) => lesson.data.startsWith(visibleMonthKey));
+  const availableCount = monthLessons.filter((lesson) => lesson.status === "disponivel").length;
+  const requestedCount = monthLessons.filter((lesson) =>
+    ["cancelamento_solicitado", "solicitada"].includes(lesson.status),
+  ).length;
+  const selectedDayLessons = (lessonsByDay[selectedDate] ?? []).sort((a, b) =>
+    a.hora.localeCompare(b.hora),
+  );
+  const instructorSummary = data.instructors.map((instructor) => ({
+    id: instructor.id,
+    name: instructor.nome,
+    total: lessons.filter(
+      (lesson) => lesson.instrutorId === instructor.id && lesson.data.startsWith(visibleMonthKey),
+    ).length,
+    available: lessons.filter(
+      (lesson) =>
+        lesson.instrutorId === instructor.id &&
+        lesson.data.startsWith(visibleMonthKey) &&
+        lesson.status === "disponivel",
+    ).length,
+  }));
+  const selectedInstructorName =
+    data.instructors.find((instructor) => instructor.id === selectedInstructorId)?.nome ??
+    "Instrutor";
+
+  function changeMonth(step: number) {
+    setVisibleMonth((current) => new Date(current.getFullYear(), current.getMonth() + step, 1));
+  }
+
+  return (
+    <div className="mb-8 overflow-hidden rounded-lg border border-slate-200">
+      <div className="border-b border-slate-200 bg-white p-5">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <h3 className="text-2xl font-black text-slate-900">Agenda de aulas</h3>
+            <p className="mt-1 text-sm font-semibold text-slate-500">
+              Gerencie horarios, solicitacoes e desmarcacoes.
+            </p>
+          </div>
+          <div className="flex flex-wrap items-center gap-2">
+            <button
+              className="h-9 rounded-md bg-slate-100 px-3 text-sm font-bold text-slate-700 hover:bg-slate-200"
+              onClick={() => setVisibleMonth(new Date())}
+              type="button"
+            >
+              Hoje
+            </button>
+            <button
+              aria-label="Mes anterior"
+              className="grid size-9 place-items-center rounded-md bg-slate-100 text-slate-700 hover:bg-slate-200"
+              onClick={() => changeMonth(-1)}
+              type="button"
+            >
+              <ChevronLeft size={17} />
+            </button>
+            <button
+              aria-label="Proximo mes"
+              className="grid size-9 place-items-center rounded-md bg-slate-100 text-slate-700 hover:bg-slate-200"
+              onClick={() => changeMonth(1)}
+              type="button"
+            >
+              <ChevronRight size={17} />
+            </button>
+            <div className="ml-1 hidden overflow-hidden rounded-md border border-slate-200 sm:flex">
+              {["Mes", "Semana", "Dia", "Lista"].map((view, index) => (
+                <span
+                  className={`px-3 py-2 text-xs font-black ${
+                    index === 0 ? "bg-slate-200 text-slate-900" : "bg-white text-slate-500"
+                  }`}
+                  key={view}
+                >
+                  {view}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+        <div className="mt-5 grid gap-3 lg:grid-cols-[1fr_auto] lg:items-end">
+          <div className="grid gap-3 sm:grid-cols-3">
+            <AdminScheduleMetric label="Horarios no mes" value={monthLessons.length} />
+            <AdminScheduleMetric label="Disponiveis" value={availableCount} />
+            <AdminScheduleMetric label="Solicitacoes" value={requestedCount} />
+          </div>
+          <p className="text-center text-base font-black lowercase text-slate-700 lg:text-right">
+            {formatMonth(visibleMonth)}
+          </p>
+        </div>
+        <div className="mt-4 flex flex-wrap gap-2">
+          {instructorSummary.map((item) => (
+            <button
+              className={`rounded-md border px-4 py-2 text-sm font-black ${
+                selectedInstructorId === item.id
+                  ? "border-[#003B95] bg-[#003B95] text-white"
+                  : "border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100"
+              }`}
+              key={item.id}
+              onClick={() => setSelectedInstructorId(item.id)}
+              type="button"
+            >
+              {item.name}: {item.available}/{item.total} livres
+            </button>
+          ))}
+        </div>
+        <div className="mt-4 flex flex-wrap gap-2 text-xs font-black">
+          <AdminLegendItem className="bg-emerald-600" label="Livre" />
+          <AdminLegendItem className="bg-amber-500" label="Solicitado" />
+          <AdminLegendItem className="bg-[#003B95]" label="Agendado" />
+          <AdminLegendItem className="bg-rose-600" label="Desmarque/cancelado" />
+        </div>
+      </div>
+
+      <div className="grid gap-4 bg-white p-4 xl:grid-cols-[minmax(0,1.45fr)_minmax(420px,0.9fr)]">
+      <div className="overflow-x-auto rounded-md border border-slate-200 bg-white">
+        <div className="min-w-[920px]">
+          <div className="grid grid-cols-7 border-b border-slate-200 bg-slate-50 text-center text-[11px] font-black text-slate-700">
+            {weekDays.map((day) => (
+              <div className="border-r border-slate-200 px-2 py-3 last:border-r-0" key={day}>
+                {day}
+              </div>
+            ))}
+          </div>
+
+          <div className="grid grid-cols-7 bg-white">
+            {calendarDays.map((day) => {
+              const dayKey = toDateKey(day);
+              const dayLessons = (lessonsByDay[dayKey] ?? []).sort((a, b) =>
+                a.hora.localeCompare(b.hora),
+              );
+              const dayAvailableCount = dayLessons.filter(
+                (lesson) => lesson.status === "disponivel",
+              ).length;
+              const dayRequestCount = dayLessons.filter((lesson) =>
+                ["cancelamento_solicitado", "solicitada"].includes(lesson.status),
+              ).length;
+              const isCurrentMonth = day.getMonth() === visibleMonth.getMonth();
+              const isToday = dayKey === toDateKey(new Date());
+
+              return (
+                <div
+                  className={`min-h-[120px] border-b border-r border-slate-200 p-2 last:border-r-0 ${
+                    isCurrentMonth
+                      ? dayRequestCount
+                        ? "bg-amber-50"
+                        : dayAvailableCount
+                          ? "bg-emerald-50"
+                          : "bg-white"
+                      : "bg-slate-100 text-slate-400"
+                  } ${isToday ? "ring-2 ring-inset ring-sky-300" : ""}`}
+                  key={dayKey}
+                >
+                  <div className="mb-2 flex items-center justify-between gap-2">
+                    <span className="text-[11px] font-black text-slate-400">
+                      {dayLessons.length ? `${dayLessons.length} horarios de ${selectedInstructorName}` : ""}
+                    </span>
+                    <span className="text-sm font-black">{day.getDate()}</span>
+                  </div>
+                  <button
+                    className={`grid min-h-20 w-full gap-2 rounded-md border px-3 py-3 text-left transition ${
+                      selectedDate === dayKey
+                        ? "border-[#003B95] bg-[#003B95]/5 ring-2 ring-[#003B95]/20"
+                        : dayRequestCount
+                          ? "border-amber-200 bg-amber-50 hover:bg-amber-100"
+                          : dayAvailableCount
+                            ? "border-emerald-200 bg-emerald-50 hover:bg-emerald-100"
+                            : "border-slate-200 bg-white hover:bg-slate-50"
+                    }`}
+                    onClick={() => setSelectedDate(dayKey)}
+                    type="button"
+                  >
+                    <span className="text-sm font-black text-slate-800">
+                      {dayLessons.length ? `${dayLessons.length} horarios` : "Sem horarios"}
+                    </span>
+                    <span className="text-xs font-bold text-emerald-700">
+                      {dayAvailableCount} livres
+                    </span>
+                    <span className="text-xs font-bold text-amber-600">
+                      {
+                        dayRequestCount
+                      }{" "}
+                      solicitacoes
+                    </span>
+                  </button>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+
+      <div className="rounded-md border border-slate-200 bg-white p-5 shadow-sm">
+        <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+          <div>
+            <h3 className="text-base font-black text-slate-900">
+              Horarios de {selectedInstructorName} em {formatDate(selectedDate)}
+            </h3>
+            <p className="text-xs font-semibold text-slate-500">
+              Clique em um dia no calendario para administrar os horarios.
+            </p>
+          </div>
+          <span className="rounded-md bg-slate-100 px-2 py-1 text-xs font-black text-slate-600">
+            {selectedDayLessons.length} horarios
+          </span>
+        </div>
+        <div className="grid gap-2 lg:grid-cols-2">
+          {selectedDayLessons.map((lesson) => {
+            const tone = getLessonCardTone(lesson.status);
+
+            return (
+              <article
+                className={`relative grid gap-3 overflow-hidden rounded-md border p-3 pl-5 sm:grid-cols-[90px_1fr_auto] sm:items-center ${tone.card}`}
+                key={lesson.id}
+              >
+                <span className={`absolute inset-y-0 left-0 w-1.5 ${tone.accent}`} />
+                <strong className={`text-lg ${tone.text}`}>{lesson.hora}</strong>
+                <div>
+                  <p className="font-black text-slate-800">
+                    {getLessonStudentName(data.students, lesson)}
+                  </p>
+                  <p className="text-sm font-semibold text-slate-500">
+                    {getVehicleName(data.vehicles, lesson.veiculoId)}
+                  </p>
+                </div>
+                <div className="flex flex-wrap items-center gap-2">
+                  <StatusPill>{lesson.status}</StatusPill>
+                  <AdminLessonActions
+                    lesson={lesson}
+                    onApprove={() => onApprove(lesson)}
+                    onEdit={() => onEdit(lesson)}
+                    onKeep={() => onKeep(lesson)}
+                    onRelease={() => onRelease(lesson)}
+                  />
+                </div>
+              </article>
+            );
+          })}
+          {!selectedDayLessons.length ? (
+            <p className="rounded-md border border-slate-200 p-4 font-semibold text-slate-500">
+              Nenhum horario para este instrutor neste dia.
+            </p>
+          ) : null}
+        </div>
+      </div>
+      </div>
+    </div>
+  );
+}
+
+function AdminScheduleMetric({ label, value }: { label: string; value: number }) {
+  return (
+    <div className="rounded-md border border-slate-200 bg-slate-50 px-3 py-2">
+      <p className="text-xs font-black uppercase text-slate-400">{label}</p>
+      <p className="text-xl font-black text-[#003B95]">{value}</p>
+    </div>
+  );
+}
+
+function AdminLegendItem({ className, label }: { className: string; label: string }) {
+  return (
+    <span className="inline-flex items-center gap-2 rounded-md border border-slate-200 bg-white px-2 py-1 text-slate-600">
+      <span className={`size-2.5 rounded-full ${className}`} />
+      {label}
+    </span>
+  );
+}
+
+function AdminLessonActions({
+  compact = false,
+  lesson,
+  onApprove,
+  onEdit,
+  onKeep,
+  onRelease,
+}: {
+  compact?: boolean;
+  lesson: Lesson;
+  onApprove: () => void;
+  onEdit: () => void;
+  onKeep: () => void;
+  onRelease: () => void;
+}) {
+  const textSize = compact ? "text-[10px]" : "text-xs";
+  const buttonHeight = compact ? "min-h-7" : "h-9";
+
+  return (
+    <div className="flex flex-wrap items-center gap-2">
+      {lesson.status === "solicitada" ? (
+        <button
+          className={`inline-flex ${buttonHeight} items-center gap-1 rounded-md bg-emerald-100 px-2 font-black text-emerald-700 hover:bg-emerald-200 ${textSize}`}
+          onClick={onApprove}
+          type="button"
+        >
+          <CheckCircle2 size={15} />
+          Aprovar
+        </button>
+      ) : null}
+      {lesson.status === "cancelamento_solicitado" ? (
+        <button
+          className={`inline-flex ${buttonHeight} items-center gap-1 rounded-md bg-emerald-100 px-2 font-black text-emerald-700 hover:bg-emerald-200 ${textSize}`}
+          onClick={onRelease}
+          type="button"
+        >
+          <CheckCircle2 size={15} />
+          Liberar
+        </button>
+      ) : null}
+      {lesson.status === "cancelamento_solicitado" ? (
+        <button
+          className={`inline-flex ${buttonHeight} items-center gap-1 rounded-md bg-slate-100 px-2 font-black text-slate-700 hover:bg-slate-200 ${textSize}`}
+          onClick={onKeep}
+          type="button"
+        >
+          <XCircle size={15} />
+          Manter
+        </button>
+      ) : null}
+      {lesson.status === "agendada" ? (
+        <button
+          className={`inline-flex ${buttonHeight} items-center gap-1 rounded-md bg-orange-100 px-2 font-black text-orange-700 hover:bg-orange-200 ${textSize}`}
+          onClick={onRelease}
+          type="button"
+        >
+          <XCircle size={15} />
+          Desmarcar
+        </button>
+      ) : null}
+      <button
+        aria-label="Editar"
+        className={`${compact ? "size-7" : "size-9"} grid place-items-center rounded-md bg-amber-100 text-amber-700 hover:bg-amber-200`}
+        onClick={onEdit}
+        title="Editar"
+        type="button"
+      >
+        <Pencil size={16} />
+      </button>
+    </div>
+  );
+}
+
 function FormShell({
   children,
   editing,
@@ -937,50 +1575,6 @@ function FormShell({
         ) : null}
       </div>
     </div>
-  );
-}
-
-function StudentForm({
-  editing,
-  onCancel,
-  onSubmit,
-  saving,
-}: {
-  editing: Student | null;
-  onCancel: () => void;
-  onSubmit: (event: FormEvent<HTMLFormElement>) => void;
-  saving: boolean;
-}) {
-  return (
-    <form onSubmit={onSubmit}>
-      <FormShell editing={Boolean(editing)} onCancel={onCancel} saving={saving}>
-        <Field defaultValue={editing?.nome} label="Nome completo" name="nome" />
-        <Field defaultValue={editing?.cpf} label="CPF" name="cpf" />
-        <Field defaultValue={editing?.telefone} label="Telefone" name="telefone" />
-        <Field defaultValue={editing?.email} label="E-mail" name="email" type="email" />
-        <SelectField
-          defaultValue={editing?.categoria ?? "B"}
-          label="Categoria"
-          name="categoria"
-          options={["A", "B", "AB", "D"].map((value) => ({ label: value, value }))}
-        />
-        <SelectField
-          defaultValue={editing?.status ?? "ativo"}
-          label="Status"
-          name="status"
-          options={["ativo", "pendente", "concluido", "cancelado"].map((value) => ({
-            label: value,
-            value,
-          }))}
-        />
-        <Field
-          defaultValue={editing?.aulasRealizadas ?? 0}
-          label="Aulas realizadas"
-          name="aulasRealizadas"
-          type="number"
-        />
-      </FormShell>
-    </form>
   );
 }
 
@@ -1029,10 +1623,19 @@ function VehicleForm({
         <Field defaultValue={editing?.modelo} label="Modelo" name="modelo" />
         <Field defaultValue={editing?.placa} label="Placa" name="placa" />
         <SelectField
+          defaultValue={editing?.cambio ?? "manual"}
+          label="Cambio"
+          name="cambio"
+          options={[
+            { label: "manual", value: "manual" },
+            { label: "automatico", value: "automatico" },
+          ]}
+        />
+        <SelectField
           defaultValue={editing?.categoria ?? "B"}
           label="Categoria"
           name="categoria"
-          options={["A", "B", "D"].map((value) => ({ label: value, value }))}
+          options={[{ label: "B", value: "B" }]}
         />
         <SelectField
           defaultValue={editing?.status ?? "disponivel"}
@@ -1061,22 +1664,34 @@ function EnrollmentForm({
   onSubmit: (event: FormEvent<HTMLFormElement>) => void;
   saving: boolean;
 }) {
+  const student = data.students.find((item) => item.id === editing?.alunoId) ?? null;
+
   return (
     <form onSubmit={onSubmit}>
       <FormShell editing={Boolean(editing)} onCancel={onCancel} saving={saving}>
+        <Field defaultValue={student?.nome} label="Nome completo" name="nome" />
+        <Field defaultValue={student?.email} label="E-mail" name="email" type="email" />
+        <Field defaultValue={student?.cpf} label="CPF" name="cpf" />
+        <Field defaultValue={student?.endereco} label="Endereco" name="endereco" />
         <SelectField
-          defaultValue={editing?.alunoId ?? data.students[0]?.id}
-          label="Aluno"
-          name="alunoId"
-          options={data.students.map((student) => ({ label: student.nome, value: student.id }))}
+          defaultValue={editing?.cambioPreferido ?? "manual"}
+          label="Opcao de carro"
+          name="cambioPreferido"
+          options={[
+            { label: "manual", value: "manual" },
+            { label: "automatico", value: "automatico" },
+          ]}
         />
-        <Field defaultValue={editing?.curso} label="Curso" name="curso" />
-        <Field defaultValue={editing?.inicio} label="Inicio" name="inicio" type="date" />
-        <Field defaultValue={editing?.valor ?? 0} label="Valor" name="valor" type="number" />
+        <Field
+          defaultValue={editing?.aulasContratadas ?? 0}
+          label="Aulas contratadas"
+          name="aulasContratadas"
+          type="number"
+        />
         <SelectField
           defaultValue={editing?.status ?? "ativo"}
-          label="Status"
-          name="status"
+          label="Status da matricula"
+          name="enrollmentStatus"
           options={["ativo", "pendente", "concluido", "cancelado"].map((value) => ({
             label: value,
             value,
@@ -1139,7 +1754,14 @@ function LessonForm({
           defaultValue={editing?.status ?? "agendada"}
           label="Status"
           name="status"
-          options={["agendada", "realizada", "cancelada"].map((value) => ({
+          options={[
+            "disponivel",
+            "solicitada",
+            "agendada",
+            "cancelamento_solicitado",
+            "realizada",
+            "cancelada",
+          ].map((value) => ({
             label: value,
             value,
           }))}

@@ -24,3 +24,24 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+@media print {
+  body * {
+    visibility: hidden;
+  }
+
+  .print-receipt,
+  .print-receipt * {
+    visibility: visible;
+  }
+
+  .print-receipt {
+    border: 0;
+    box-shadow: none;
+    left: 0;
+    max-width: none;
+    padding: 0;
+    position: absolute;
+    top: 0;
+  }
+}

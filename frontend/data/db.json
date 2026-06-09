@@ -1,136 +1,2548 @@
 {
   "students": [
     {
-      "id": "stu-ana",
-      "nome": "Ana Martins",
-      "cpf": "123.456.789-00",
-      "telefone": "(21) 99912-3400",
-      "email": "ana.martins@email.com",
+      "nome": "Jaqueline",
+      "cpf": "1234567890",
+      "telefone": "",
+      "email": "jaquelinelinda@gmail.com",
+      "endereco": "Leblon",
       "categoria": "B",
       "status": "ativo",
-      "aulasRealizadas": 8
+      "aulasRealizadas": 0,
+      "id": "5bbf65f4-5166-40a2-8589-b7f5b0c5c2a1"
     },
     {
-      "id": "stu-carlos",
-      "nome": "Carlos Lima",
-      "cpf": "987.654.321-00",
-      "telefone": "(21) 98877-6611",
-      "email": "carlos.lima@email.com",
-      "categoria": "AB",
-      "status": "pendente",
-      "aulasRealizadas": 3
-    },
-    {
-      "id": "stu-bianca",
-      "nome": "Bianca Rocha",
-      "cpf": "456.781.239-10",
-      "telefone": "(21) 97744-2800",
-      "email": "bianca.rocha@email.com",
-      "categoria": "A",
+      "nome": "Renan Cristiano Soares Da Silva",
+      "cpf": "17146955737",
+      "telefone": "",
+      "email": "renannanrern@gmail.com",
+      "endereco": "Rua Serra e Mar 12",
+      "categoria": "B",
       "status": "ativo",
-      "aulasRealizadas": 11
+      "aulasRealizadas": 0,
+      "id": "1d1a4f5b-b589-48c3-a6e4-2dbdc1e6b882"
     }
   ],
   "instructors": [
     {
-      "id": "ins-marcos",
-      "nome": "Marcos Pereira",
+      "id": "ins-renan",
+      "nome": "Renan",
       "telefone": "(21) 99240-1414",
-      "categorias": "A, B",
+      "categorias": "B",
       "status": "ativo"
     },
     {
-      "id": "ins-luciana",
-      "nome": "Luciana Alves",
+      "id": "ins-denner",
+      "nome": "Denner",
       "telefone": "(21) 98320-2200",
-      "categorias": "B, D",
+      "categorias": "B",
+      "status": "ativo"
+    },
+    {
+      "id": "ins-leo",
+      "nome": "Leo",
+      "telefone": "(21) 97777-3300",
+      "categorias": "B",
       "status": "ativo"
     }
   ],
   "vehicles": [
     {
+      "id": "db634027-2065-42b3-9833-54e9b9db6983",
+      "modelo": "Fiat Argo Aut",
+      "placa": "rk2j77",
+      "categoria": "B",
+      "cambio": "automatico",
+      "status": "aula"
+    },
+    {
       "id": "veh-onix",
       "modelo": "Chevrolet Onix",
       "placa": "RJA-4B28",
       "categoria": "B",
+      "cambio": "manual",
       "status": "disponivel"
     },
     {
-      "id": "veh-moto",
-      "modelo": "Honda CG 160",
-      "placa": "LPR-8A10",
-      "categoria": "A",
-      "status": "aula"
-    },
-    {
-      "id": "veh-argo",
+      "id": "veh-argo-manual",
       "modelo": "Fiat Argo",
       "placa": "KWD-3C92",
       "categoria": "B",
-      "status": "manutencao"
+      "cambio": "manual",
+      "status": "disponivel"
     }
   ],
   "enrollments": [
     {
-      "id": "enr-ana",
-      "alunoId": "stu-ana",
+      "id": "19024a62-2f68-4fc8-bf23-9c83acc5aa58",
+      "alunoId": "5bbf65f4-5166-40a2-8589-b7f5b0c5c2a1",
       "curso": "Direcao para habilitados",
-      "inicio": "2026-06-02",
-      "valor": 1200,
+      "inicio": "2026-06-09",
+      "valor": 0,
+      "cambioPreferido": "manual",
+      "aulasContratadas": 6,
       "status": "ativo"
     },
     {
-      "id": "enr-carlos",
-      "alunoId": "stu-carlos",
-      "curso": "Primeira habilitacao AB",
-      "inicio": "2026-06-05",
-      "valor": 2100,
-      "status": "pendente"
+      "id": "f87b3494-6905-436c-97db-ece05135e5e9",
+      "alunoId": "1d1a4f5b-b589-48c3-a6e4-2dbdc1e6b882",
+      "curso": "Direcao para habilitados",
+      "inicio": "2026-06-09",
+      "valor": 0,
+      "cambioPreferido": "automatico",
+      "aulasContratadas": 20,
+      "status": "ativo"
     }
   ],
   "lessons": [
     {
-      "id": "les-ana-hoje",
-      "alunoId": "stu-ana",
-      "instrutorId": "ins-marcos",
+      "id": "lesson-renan-2026-06-09-08-00",
+      "instrutorId": "ins-renan",
       "veiculoId": "veh-onix",
-      "data": "2026-06-07",
+      "data": "2026-06-09",
+      "hora": "08:00",
+      "tipo": "Pratica",
+      "status": "solicitada",
+      "alunoId": "5bbf65f4-5166-40a2-8589-b7f5b0c5c2a1"
+    },
+    {
+      "id": "lesson-renan-2026-06-09-09-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-09",
       "hora": "09:00",
       "tipo": "Pratica",
-      "status": "agendada"
+      "status": "solicitada",
+      "alunoId": "5bbf65f4-5166-40a2-8589-b7f5b0c5c2a1"
     },
     {
-      "id": "les-bianca-hoje",
-      "alunoId": "stu-bianca",
-      "instrutorId": "ins-marcos",
-      "veiculoId": "veh-moto",
-      "data": "2026-06-07",
-      "hora": "14:30",
+      "id": "lesson-renan-2026-06-09-10-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-09",
+      "hora": "10:00",
       "tipo": "Pratica",
-      "status": "agendada"
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-renan-2026-06-09-11-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-09",
+      "hora": "11:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-renan-2026-06-09-13-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-09",
+      "hora": "13:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-renan-2026-06-09-14-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-09",
+      "hora": "14:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-renan-2026-06-09-15-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-09",
+      "hora": "15:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-09-08-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-09",
+      "hora": "08:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-09-09-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-09",
+      "hora": "09:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-09-10-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-09",
+      "hora": "10:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-09-11-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-09",
+      "hora": "11:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-09-14-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-09",
+      "hora": "14:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-09-15-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-09",
+      "hora": "15:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-09-16-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-09",
+      "hora": "16:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-09-17-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-09",
+      "hora": "17:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-renan-2026-06-10-08-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-10",
+      "hora": "08:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-renan-2026-06-10-10-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-10",
+      "hora": "10:00",
+      "tipo": "Pratica",
+      "status": "agendada",
+      "alunoId": "1d1a4f5b-b589-48c3-a6e4-2dbdc1e6b882"
+    },
+    {
+      "id": "lesson-renan-2026-06-10-11-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-10",
+      "hora": "11:00",
+      "tipo": "Pratica",
+      "status": "agendada",
+      "alunoId": "1d1a4f5b-b589-48c3-a6e4-2dbdc1e6b882"
+    },
+    {
+      "id": "lesson-renan-2026-06-10-13-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-10",
+      "hora": "13:00",
+      "tipo": "Pratica",
+      "status": "solicitada",
+      "alunoId": "5bbf65f4-5166-40a2-8589-b7f5b0c5c2a1"
+    },
+    {
+      "id": "lesson-renan-2026-06-10-14-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-10",
+      "hora": "14:00",
+      "tipo": "Pratica",
+      "status": "solicitada",
+      "alunoId": "5bbf65f4-5166-40a2-8589-b7f5b0c5c2a1"
+    },
+    {
+      "id": "lesson-renan-2026-06-10-15-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-10",
+      "hora": "15:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-10-08-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-10",
+      "hora": "08:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-10-09-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-10",
+      "hora": "09:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-10-10-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-10",
+      "hora": "10:00",
+      "tipo": "Pratica",
+      "status": "disponivel",
+      "alunoId": ""
+    },
+    {
+      "id": "lesson-denner-2026-06-10-11-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-10",
+      "hora": "11:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-10-14-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-10",
+      "hora": "14:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-10-15-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-10",
+      "hora": "15:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-10-16-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-10",
+      "hora": "16:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-10-17-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-10",
+      "hora": "17:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-renan-2026-06-11-08-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-11",
+      "hora": "08:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-renan-2026-06-11-09-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-11",
+      "hora": "09:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-renan-2026-06-11-10-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-11",
+      "hora": "10:00",
+      "tipo": "Pratica",
+      "status": "agendada",
+      "alunoId": "1d1a4f5b-b589-48c3-a6e4-2dbdc1e6b882"
+    },
+    {
+      "id": "lesson-renan-2026-06-11-11-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-11",
+      "hora": "11:00",
+      "tipo": "Pratica",
+      "status": "agendada",
+      "alunoId": "1d1a4f5b-b589-48c3-a6e4-2dbdc1e6b882"
+    },
+    {
+      "id": "lesson-renan-2026-06-11-13-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-11",
+      "hora": "13:00",
+      "tipo": "Pratica",
+      "status": "agendada",
+      "alunoId": "5bbf65f4-5166-40a2-8589-b7f5b0c5c2a1"
+    },
+    {
+      "id": "lesson-renan-2026-06-11-14-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-11",
+      "hora": "14:00",
+      "tipo": "Pratica",
+      "status": "agendada",
+      "alunoId": "5bbf65f4-5166-40a2-8589-b7f5b0c5c2a1"
+    },
+    {
+      "id": "lesson-renan-2026-06-11-15-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-11",
+      "hora": "15:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-11-08-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-11",
+      "hora": "08:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-11-09-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-11",
+      "hora": "09:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-11-10-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-11",
+      "hora": "10:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-11-11-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-11",
+      "hora": "11:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-11-14-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-11",
+      "hora": "14:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-11-15-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-11",
+      "hora": "15:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-11-16-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-11",
+      "hora": "16:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-11-17-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-11",
+      "hora": "17:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-renan-2026-06-12-08-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-12",
+      "hora": "08:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-renan-2026-06-12-09-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-12",
+      "hora": "09:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-renan-2026-06-12-10-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-12",
+      "hora": "10:00",
+      "tipo": "Pratica",
+      "status": "agendada",
+      "alunoId": "1d1a4f5b-b589-48c3-a6e4-2dbdc1e6b882"
+    },
+    {
+      "id": "lesson-renan-2026-06-12-11-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-12",
+      "hora": "11:00",
+      "tipo": "Pratica",
+      "status": "agendada",
+      "alunoId": "1d1a4f5b-b589-48c3-a6e4-2dbdc1e6b882"
+    },
+    {
+      "id": "lesson-renan-2026-06-12-13-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-12",
+      "hora": "13:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-renan-2026-06-12-14-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-12",
+      "hora": "14:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-renan-2026-06-12-15-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-12",
+      "hora": "15:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-12-08-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-12",
+      "hora": "08:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-12-09-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-12",
+      "hora": "09:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-12-10-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-12",
+      "hora": "10:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-12-11-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-12",
+      "hora": "11:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-12-14-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-12",
+      "hora": "14:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-12-15-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-12",
+      "hora": "15:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-12-16-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-12",
+      "hora": "16:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-12-17-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-12",
+      "hora": "17:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-13-07-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-13",
+      "hora": "07:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-13-08-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-13",
+      "hora": "08:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-13-09-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-13",
+      "hora": "09:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-13-10-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-13",
+      "hora": "10:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-13-11-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-13",
+      "hora": "11:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-leo-2026-06-13-07-00",
+      "instrutorId": "ins-leo",
+      "veiculoId": "veh-argo-auto",
+      "data": "2026-06-13",
+      "hora": "07:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-leo-2026-06-13-08-00",
+      "instrutorId": "ins-leo",
+      "veiculoId": "veh-argo-auto",
+      "data": "2026-06-13",
+      "hora": "08:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-leo-2026-06-13-09-00",
+      "instrutorId": "ins-leo",
+      "veiculoId": "veh-argo-auto",
+      "data": "2026-06-13",
+      "hora": "09:00",
+      "tipo": "Pratica",
+      "status": "disponivel",
+      "alunoId": ""
+    },
+    {
+      "id": "lesson-leo-2026-06-13-10-00",
+      "instrutorId": "ins-leo",
+      "veiculoId": "veh-argo-auto",
+      "data": "2026-06-13",
+      "hora": "10:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-leo-2026-06-13-11-00",
+      "instrutorId": "ins-leo",
+      "veiculoId": "veh-argo-auto",
+      "data": "2026-06-13",
+      "hora": "11:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-renan-2026-06-15-08-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-15",
+      "hora": "08:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-renan-2026-06-15-09-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-15",
+      "hora": "09:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-renan-2026-06-15-10-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-15",
+      "hora": "10:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-renan-2026-06-15-11-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-15",
+      "hora": "11:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-renan-2026-06-15-13-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-15",
+      "hora": "13:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-renan-2026-06-15-14-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-15",
+      "hora": "14:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-renan-2026-06-15-15-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-15",
+      "hora": "15:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-15-08-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-15",
+      "hora": "08:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-15-09-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-15",
+      "hora": "09:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-15-10-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-15",
+      "hora": "10:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-15-11-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-15",
+      "hora": "11:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-15-14-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-15",
+      "hora": "14:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-15-15-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-15",
+      "hora": "15:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-15-16-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-15",
+      "hora": "16:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-15-17-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-15",
+      "hora": "17:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-renan-2026-06-16-08-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-16",
+      "hora": "08:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-renan-2026-06-16-09-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-16",
+      "hora": "09:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-renan-2026-06-16-10-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-16",
+      "hora": "10:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-renan-2026-06-16-11-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-16",
+      "hora": "11:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-renan-2026-06-16-13-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-16",
+      "hora": "13:00",
+      "tipo": "Pratica",
+      "status": "solicitada",
+      "alunoId": "5bbf65f4-5166-40a2-8589-b7f5b0c5c2a1"
+    },
+    {
+      "id": "lesson-renan-2026-06-16-14-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-16",
+      "hora": "14:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-renan-2026-06-16-15-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-16",
+      "hora": "15:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-16-08-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-16",
+      "hora": "08:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-16-09-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-16",
+      "hora": "09:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-16-10-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-16",
+      "hora": "10:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-16-11-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-16",
+      "hora": "11:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-16-14-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-16",
+      "hora": "14:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-16-15-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-16",
+      "hora": "15:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-16-16-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-16",
+      "hora": "16:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-16-17-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-16",
+      "hora": "17:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-renan-2026-06-17-08-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-17",
+      "hora": "08:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-renan-2026-06-17-09-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-17",
+      "hora": "09:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-renan-2026-06-17-10-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-17",
+      "hora": "10:00",
+      "tipo": "Pratica",
+      "status": "agendada",
+      "alunoId": "1d1a4f5b-b589-48c3-a6e4-2dbdc1e6b882"
+    },
+    {
+      "id": "lesson-renan-2026-06-17-11-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-17",
+      "hora": "11:00",
+      "tipo": "Pratica",
+      "status": "agendada",
+      "alunoId": "1d1a4f5b-b589-48c3-a6e4-2dbdc1e6b882"
+    },
+    {
+      "id": "lesson-renan-2026-06-17-13-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-17",
+      "hora": "13:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-renan-2026-06-17-14-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-17",
+      "hora": "14:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-renan-2026-06-17-15-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-17",
+      "hora": "15:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-17-08-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-17",
+      "hora": "08:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-17-09-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-17",
+      "hora": "09:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-17-10-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-17",
+      "hora": "10:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-17-11-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-17",
+      "hora": "11:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-17-14-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-17",
+      "hora": "14:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-17-15-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-17",
+      "hora": "15:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-17-16-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-17",
+      "hora": "16:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-17-17-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-17",
+      "hora": "17:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-renan-2026-06-18-08-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-18",
+      "hora": "08:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-renan-2026-06-18-09-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-18",
+      "hora": "09:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-renan-2026-06-18-10-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-18",
+      "hora": "10:00",
+      "tipo": "Pratica",
+      "status": "agendada",
+      "alunoId": "1d1a4f5b-b589-48c3-a6e4-2dbdc1e6b882"
+    },
+    {
+      "id": "lesson-renan-2026-06-18-11-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-18",
+      "hora": "11:00",
+      "tipo": "Pratica",
+      "status": "agendada",
+      "alunoId": "1d1a4f5b-b589-48c3-a6e4-2dbdc1e6b882"
+    },
+    {
+      "id": "lesson-renan-2026-06-18-13-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-18",
+      "hora": "13:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-renan-2026-06-18-14-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-18",
+      "hora": "14:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-renan-2026-06-18-15-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-18",
+      "hora": "15:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-18-08-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-18",
+      "hora": "08:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-18-09-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-18",
+      "hora": "09:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-18-10-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-18",
+      "hora": "10:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-18-11-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-18",
+      "hora": "11:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-18-14-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-18",
+      "hora": "14:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-18-15-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-18",
+      "hora": "15:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-18-16-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-18",
+      "hora": "16:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-18-17-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-18",
+      "hora": "17:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-renan-2026-06-19-08-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-19",
+      "hora": "08:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-renan-2026-06-19-09-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-19",
+      "hora": "09:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-renan-2026-06-19-10-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-19",
+      "hora": "10:00",
+      "tipo": "Pratica",
+      "status": "agendada",
+      "alunoId": "1d1a4f5b-b589-48c3-a6e4-2dbdc1e6b882"
+    },
+    {
+      "id": "lesson-renan-2026-06-19-11-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-19",
+      "hora": "11:00",
+      "tipo": "Pratica",
+      "status": "agendada",
+      "alunoId": "1d1a4f5b-b589-48c3-a6e4-2dbdc1e6b882"
+    },
+    {
+      "id": "lesson-renan-2026-06-19-13-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-19",
+      "hora": "13:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-renan-2026-06-19-14-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-19",
+      "hora": "14:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-renan-2026-06-19-15-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-19",
+      "hora": "15:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-19-08-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-19",
+      "hora": "08:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-19-09-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-19",
+      "hora": "09:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-19-10-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-19",
+      "hora": "10:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-19-11-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-19",
+      "hora": "11:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-19-14-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-19",
+      "hora": "14:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-19-15-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-19",
+      "hora": "15:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-19-16-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-19",
+      "hora": "16:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-19-17-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-19",
+      "hora": "17:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-20-07-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-20",
+      "hora": "07:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-20-08-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-20",
+      "hora": "08:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-20-09-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-20",
+      "hora": "09:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-20-10-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-20",
+      "hora": "10:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-20-11-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-20",
+      "hora": "11:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-leo-2026-06-20-07-00",
+      "instrutorId": "ins-leo",
+      "veiculoId": "veh-argo-auto",
+      "data": "2026-06-20",
+      "hora": "07:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-leo-2026-06-20-08-00",
+      "instrutorId": "ins-leo",
+      "veiculoId": "veh-argo-auto",
+      "data": "2026-06-20",
+      "hora": "08:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-leo-2026-06-20-09-00",
+      "instrutorId": "ins-leo",
+      "veiculoId": "veh-argo-auto",
+      "data": "2026-06-20",
+      "hora": "09:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-leo-2026-06-20-10-00",
+      "instrutorId": "ins-leo",
+      "veiculoId": "veh-argo-auto",
+      "data": "2026-06-20",
+      "hora": "10:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-leo-2026-06-20-11-00",
+      "instrutorId": "ins-leo",
+      "veiculoId": "veh-argo-auto",
+      "data": "2026-06-20",
+      "hora": "11:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-renan-2026-06-22-08-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-22",
+      "hora": "08:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-renan-2026-06-22-09-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-22",
+      "hora": "09:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-renan-2026-06-22-10-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-22",
+      "hora": "10:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-renan-2026-06-22-11-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-22",
+      "hora": "11:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-renan-2026-06-22-13-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-22",
+      "hora": "13:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-renan-2026-06-22-14-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-22",
+      "hora": "14:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-renan-2026-06-22-15-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-22",
+      "hora": "15:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-22-08-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-22",
+      "hora": "08:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-22-09-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-22",
+      "hora": "09:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-22-10-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-22",
+      "hora": "10:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-22-11-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-22",
+      "hora": "11:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-22-14-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-22",
+      "hora": "14:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-22-15-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-22",
+      "hora": "15:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-22-16-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-22",
+      "hora": "16:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-22-17-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-22",
+      "hora": "17:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-renan-2026-06-23-08-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-23",
+      "hora": "08:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-renan-2026-06-23-09-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-23",
+      "hora": "09:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-renan-2026-06-23-10-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-23",
+      "hora": "10:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-renan-2026-06-23-11-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-23",
+      "hora": "11:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-renan-2026-06-23-13-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-23",
+      "hora": "13:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-renan-2026-06-23-14-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-23",
+      "hora": "14:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-renan-2026-06-23-15-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-23",
+      "hora": "15:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-23-08-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-23",
+      "hora": "08:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-23-09-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-23",
+      "hora": "09:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-23-10-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-23",
+      "hora": "10:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-23-11-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-23",
+      "hora": "11:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-23-14-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-23",
+      "hora": "14:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-23-15-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-23",
+      "hora": "15:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-23-16-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-23",
+      "hora": "16:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-23-17-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-23",
+      "hora": "17:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-renan-2026-06-24-08-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-24",
+      "hora": "08:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-renan-2026-06-24-09-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-24",
+      "hora": "09:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-renan-2026-06-24-10-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-24",
+      "hora": "10:00",
+      "tipo": "Pratica",
+      "status": "agendada",
+      "alunoId": "1d1a4f5b-b589-48c3-a6e4-2dbdc1e6b882"
+    },
+    {
+      "id": "lesson-renan-2026-06-24-11-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-24",
+      "hora": "11:00",
+      "tipo": "Pratica",
+      "status": "agendada",
+      "alunoId": "1d1a4f5b-b589-48c3-a6e4-2dbdc1e6b882"
+    },
+    {
+      "id": "lesson-renan-2026-06-24-13-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-24",
+      "hora": "13:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-renan-2026-06-24-14-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-24",
+      "hora": "14:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-renan-2026-06-24-15-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-24",
+      "hora": "15:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-24-08-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-24",
+      "hora": "08:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-24-09-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-24",
+      "hora": "09:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-24-10-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-24",
+      "hora": "10:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-24-11-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-24",
+      "hora": "11:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-24-14-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-24",
+      "hora": "14:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-24-15-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-24",
+      "hora": "15:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-24-16-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-24",
+      "hora": "16:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-24-17-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-24",
+      "hora": "17:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-renan-2026-06-25-08-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-25",
+      "hora": "08:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-renan-2026-06-25-09-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-25",
+      "hora": "09:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-renan-2026-06-25-10-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-25",
+      "hora": "10:00",
+      "tipo": "Pratica",
+      "status": "agendada",
+      "alunoId": "1d1a4f5b-b589-48c3-a6e4-2dbdc1e6b882"
+    },
+    {
+      "id": "lesson-renan-2026-06-25-11-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-25",
+      "hora": "11:00",
+      "tipo": "Pratica",
+      "status": "agendada",
+      "alunoId": "1d1a4f5b-b589-48c3-a6e4-2dbdc1e6b882"
+    },
+    {
+      "id": "lesson-renan-2026-06-25-13-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-25",
+      "hora": "13:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-renan-2026-06-25-14-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-25",
+      "hora": "14:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-renan-2026-06-25-15-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-25",
+      "hora": "15:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-25-08-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-25",
+      "hora": "08:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-25-09-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-25",
+      "hora": "09:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-25-10-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-25",
+      "hora": "10:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-25-11-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-25",
+      "hora": "11:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-25-14-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-25",
+      "hora": "14:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-25-15-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-25",
+      "hora": "15:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-25-16-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-25",
+      "hora": "16:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-25-17-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-25",
+      "hora": "17:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-renan-2026-06-26-08-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-26",
+      "hora": "08:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-renan-2026-06-26-09-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-26",
+      "hora": "09:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-renan-2026-06-26-10-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-26",
+      "hora": "10:00",
+      "tipo": "Pratica",
+      "status": "agendada",
+      "alunoId": "1d1a4f5b-b589-48c3-a6e4-2dbdc1e6b882"
+    },
+    {
+      "id": "lesson-renan-2026-06-26-11-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-26",
+      "hora": "11:00",
+      "tipo": "Pratica",
+      "status": "agendada",
+      "alunoId": "1d1a4f5b-b589-48c3-a6e4-2dbdc1e6b882"
+    },
+    {
+      "id": "lesson-renan-2026-06-26-13-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-26",
+      "hora": "13:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-renan-2026-06-26-14-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-26",
+      "hora": "14:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-renan-2026-06-26-15-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-26",
+      "hora": "15:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-26-08-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-26",
+      "hora": "08:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-26-09-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-26",
+      "hora": "09:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-26-10-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-26",
+      "hora": "10:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-26-11-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-26",
+      "hora": "11:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-26-14-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-26",
+      "hora": "14:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-26-15-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-26",
+      "hora": "15:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-26-16-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-26",
+      "hora": "16:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-26-17-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-26",
+      "hora": "17:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-27-07-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-27",
+      "hora": "07:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-27-08-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-27",
+      "hora": "08:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-27-09-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-27",
+      "hora": "09:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-27-10-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-27",
+      "hora": "10:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-27-11-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-27",
+      "hora": "11:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-leo-2026-06-27-07-00",
+      "instrutorId": "ins-leo",
+      "veiculoId": "veh-argo-auto",
+      "data": "2026-06-27",
+      "hora": "07:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-leo-2026-06-27-08-00",
+      "instrutorId": "ins-leo",
+      "veiculoId": "veh-argo-auto",
+      "data": "2026-06-27",
+      "hora": "08:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-leo-2026-06-27-09-00",
+      "instrutorId": "ins-leo",
+      "veiculoId": "veh-argo-auto",
+      "data": "2026-06-27",
+      "hora": "09:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-leo-2026-06-27-10-00",
+      "instrutorId": "ins-leo",
+      "veiculoId": "veh-argo-auto",
+      "data": "2026-06-27",
+      "hora": "10:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-leo-2026-06-27-11-00",
+      "instrutorId": "ins-leo",
+      "veiculoId": "veh-argo-auto",
+      "data": "2026-06-27",
+      "hora": "11:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-renan-2026-06-29-08-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-29",
+      "hora": "08:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-renan-2026-06-29-09-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-29",
+      "hora": "09:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-renan-2026-06-29-10-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-29",
+      "hora": "10:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-renan-2026-06-29-11-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-29",
+      "hora": "11:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-renan-2026-06-29-13-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-29",
+      "hora": "13:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-renan-2026-06-29-14-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-29",
+      "hora": "14:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-renan-2026-06-29-15-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-29",
+      "hora": "15:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-29-08-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-29",
+      "hora": "08:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-29-09-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-29",
+      "hora": "09:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-29-10-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-29",
+      "hora": "10:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-29-11-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-29",
+      "hora": "11:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-29-14-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-29",
+      "hora": "14:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-29-15-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-29",
+      "hora": "15:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-29-16-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-29",
+      "hora": "16:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-29-17-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-29",
+      "hora": "17:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-renan-2026-06-30-08-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-30",
+      "hora": "08:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-renan-2026-06-30-09-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-30",
+      "hora": "09:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-renan-2026-06-30-10-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-30",
+      "hora": "10:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-renan-2026-06-30-11-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-30",
+      "hora": "11:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-renan-2026-06-30-13-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-30",
+      "hora": "13:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-renan-2026-06-30-14-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-30",
+      "hora": "14:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-renan-2026-06-30-15-00",
+      "instrutorId": "ins-renan",
+      "veiculoId": "veh-onix",
+      "data": "2026-06-30",
+      "hora": "15:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-30-08-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-30",
+      "hora": "08:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-30-09-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-30",
+      "hora": "09:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-30-10-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-30",
+      "hora": "10:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-30-11-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-30",
+      "hora": "11:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-30-14-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-30",
+      "hora": "14:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-30-15-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-30",
+      "hora": "15:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-30-16-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-30",
+      "hora": "16:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
+    },
+    {
+      "id": "lesson-denner-2026-06-30-17-00",
+      "instrutorId": "ins-denner",
+      "veiculoId": "veh-argo-manual",
+      "data": "2026-06-30",
+      "hora": "17:00",
+      "tipo": "Pratica",
+      "status": "disponivel"
     }
   ],
-  "payments": [
-    {
-      "id": "pay-ana-1",
-      "alunoId": "stu-ana",
-      "vencimento": "2026-06-10",
-      "valor": 600,
-      "status": "pago"
-    },
-    {
-      "id": "pay-carlos-1",
-      "alunoId": "stu-carlos",
-      "vencimento": "2026-06-12",
-      "valor": 700,
-      "status": "aberto"
-    },
-    {
-      "id": "pay-bianca-1",
-      "alunoId": "stu-bianca",
-      "vencimento": "2026-06-01",
-      "valor": 450,
-      "status": "atrasado"
-    }
-  ]
+  "payments": []
 }
