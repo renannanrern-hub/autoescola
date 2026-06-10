@@ -7,6 +7,13 @@ export type Student = {
   telefone: string;
   email: string;
   endereco?: string;
+  bairro?: string;
+  municipio?: string;
+  cep?: string;
+  dataNascimento?: string;
+  identidade?: string;
+  origem?: string;
+  observacoes?: string;
   categoria: "B";
   status: Status;
   aulasRealizadas: number;
@@ -35,6 +42,7 @@ export type Enrollment = {
   curso: string;
   inicio: string;
   valor: number;
+  observacoes?: string;
   cambioPreferido?: "automatico" | "manual";
   aulasContratadas?: number;
   status: Status;

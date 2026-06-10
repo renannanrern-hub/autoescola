@@ -1,5 +1,6 @@
 import { randomUUID } from "crypto";
 import { NextRequest, NextResponse } from "next/server";
+import { isAdminRequest } from "@/lib/admin-auth";
 import { isCollectionName, readDatabase, writeDatabase } from "@/lib/store";
 
 type Params = {
@@ -9,6 +10,10 @@ type Params = {
 };
 
 export async function POST(request: NextRequest, { params }: Params) {
+  if (!isAdminRequest(request)) {
+    return NextResponse.json({ message: "Acesso administrativo obrigatorio." }, { status: 401 });
+  }
+
   const { collection } = await params;
 
   if (!isCollectionName(collection)) {
@@ -29,6 +34,10 @@ export async function POST(request: NextRequest, { params }: Params) {
 }
 
 export async function PUT(request: NextRequest, { params }: Params) {
+  if (!isAdminRequest(request)) {
+    return NextResponse.json({ message: "Acesso administrativo obrigatorio." }, { status: 401 });
+  }
+
   const { collection } = await params;
 
   if (!isCollectionName(collection)) {
@@ -56,6 +65,10 @@ export async function PUT(request: NextRequest, { params }: Params) {
 }
 
 export async function DELETE(request: NextRequest, { params }: Params) {
+  if (!isAdminRequest(request)) {
+    return NextResponse.json({ message: "Acesso administrativo obrigatorio." }, { status: 401 });
+  }
+
   const { collection } = await params;
 
   if (!isCollectionName(collection)) {

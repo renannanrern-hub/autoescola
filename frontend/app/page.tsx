@@ -1,5 +1,8 @@
 import AutoescolaApp from "./AutoescolaApp";
 import type { ModuleId } from "./AutoescolaApp";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
+import { isValidAdminSession } from "@/lib/admin-auth";
 import { readDatabase } from "@/lib/store";
 import type { DashboardStats } from "@/lib/types";
 
@@ -20,6 +23,12 @@ export default async function Home({
 }: {
   searchParams: Promise<{ mod?: string }>;
 }) {
+  const cookieStore = await cookies();
+
+  if (!isValidAdminSession(cookieStore.get("adminSession")?.value)) {
+    redirect("/admin/login");
+  }
+
   const params = await searchParams;
   const initialModule = isModuleId(params.mod) ? params.mod : "dashboard";
   const database = await readDatabase();

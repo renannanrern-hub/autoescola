@@ -1,8 +1,13 @@
 import { randomUUID } from "crypto";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
+import { isAdminRequest } from "@/lib/admin-auth";
 import { readDatabase, writeDatabase } from "@/lib/store";
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
+  if (!isAdminRequest(request)) {
+    return NextResponse.json({ message: "Acesso administrativo obrigatorio." }, { status: 401 });
+  }
+
   const payload = await request.json();
   const database = await readDatabase();
 
@@ -12,6 +17,13 @@ export async function POST(request: Request) {
     telefone: String(payload.telefone ?? ""),
     email: String(payload.email ?? ""),
     endereco: String(payload.endereco ?? ""),
+    bairro: String(payload.bairro ?? ""),
+    municipio: String(payload.municipio ?? ""),
+    cep: String(payload.cep ?? ""),
+    dataNascimento: String(payload.dataNascimento ?? ""),
+    identidade: String(payload.identidade ?? ""),
+    origem: String(payload.origem ?? ""),
+    observacoes: String(payload.observacoesAluno ?? ""),
     categoria: "B" as const,
     status: String(payload.enrollmentStatus ?? "ativo") as
       | "ativo"
@@ -59,6 +71,7 @@ export async function POST(request: Request) {
     curso: "Direcao para habilitados",
     inicio: String(payload.inicio ?? new Date().toISOString().slice(0, 10)),
     valor: Number(payload.valor || 0),
+    observacoes: String(payload.observacoesMatricula ?? ""),
     cambioPreferido: String(payload.cambioPreferido ?? "manual") as "automatico" | "manual",
     aulasContratadas: Number(payload.aulasContratadas || 0),
     status: String(payload.enrollmentStatus ?? "ativo") as

@@ -81,35 +81,8 @@ function getVehicleName(data: Database, id: string) {
   return vehicle ? `${vehicle.modelo} ${vehicle.cambio}` : "Veiculo";
 }
 
-function getVehiclePlate(data: Database, id: string) {
-  return data.vehicles.find((vehicle) => vehicle.id === id)?.placa ?? "-";
-}
-
 function getReceiptDate(value: string) {
   return new Date(`${value}T00:00:00`).toLocaleDateString("pt-BR");
-}
-
-function getReceiptDay(value: string) {
-  return new Date(`${value}T00:00:00`)
-    .toLocaleDateString("pt-BR", { weekday: "short" })
-    .replace(".", "")
-    .toUpperCase();
-}
-
-function getReceiptStatus(status: Lesson["status"]) {
-  if (status === "agendada") {
-    return "A";
-  }
-
-  if (status === "solicitada") {
-    return "S";
-  }
-
-  if (status === "cancelamento_solicitado") {
-    return "D";
-  }
-
-  return "P";
 }
 
 function getLessonCardTone(status: Lesson["status"]) {
@@ -466,7 +439,7 @@ export default function StudentPortal({ initialData }: { initialData: StudentPor
 
           <div className="xl:col-span-2">
             <Panel title="Comprovante para impressao">
-              <LessonReceipt data={data} lessons={studentLessons} student={student} />
+              <LessonReceipt lessons={studentLessons} student={student} />
             </Panel>
           </div>
         </section>
@@ -930,74 +903,85 @@ function ScheduleCalendar({
   );
 }
 
-function LessonReceipt({
-  data,
-  lessons,
-  student,
-}: {
-  data: Database;
-  lessons: Lesson[];
-  student: Student;
-}) {
-  const printableLessons = lessons
-    .filter((lesson) => lesson.status !== "cancelada")
+function LessonReceipt({ lessons, student }: { lessons: Lesson[]; student: Student }) {
+  const approvedLessons = lessons
+    .filter((lesson) => lesson.status === "agendada" || lesson.status === "realizada")
     .slice()
     .sort((a, b) => `${a.data} ${a.hora}`.localeCompare(`${b.data} ${b.hora}`));
-  const receiptNumber = `${new Date().getFullYear().toString().slice(2)}${String(
-    new Date().getMonth() + 1,
-  ).padStart(2, "0")}/${student.id.replace("stu-", "").toUpperCase()}`;
+  const receiptRows = Array.from({ length: Math.max(10, Math.ceil(approvedLessons.length / 2)) }, (_, index) => {
+    const first = approvedLessons[index * 2];
+    const second = approvedLessons[index * 2 + 1];
+
+    return { first, second };
+  });
 
   return (
     <div className="grid gap-4">
       <div className="flex flex-wrap items-center justify-between gap-3 print:hidden">
         <p className="text-sm font-semibold text-slate-500">
-          Comprovante gerado com as aulas solicitadas e agendadas do aluno.
+          O comprovante fica disponivel somente depois que o administrador aceitar a solicitacao
+          das aulas.
         </p>
-        <button
-          className="inline-flex h-10 items-center gap-2 rounded-md bg-[#003B95] px-4 text-sm font-black text-white hover:bg-[#002f78]"
-          onClick={() => window.print()}
-          type="button"
-        >
-          <Printer size={17} />
-          Imprimir
-        </button>
+        {approvedLessons.length ? (
+          <button
+            className="inline-flex h-10 items-center gap-2 rounded-md bg-[#003B95] px-4 text-sm font-black text-white hover:bg-[#002f78]"
+            onClick={() => window.print()}
+            type="button"
+          >
+            <Printer size={17} />
+            Imprimir
+          </button>
+        ) : null}
       </div>
 
-      <div className="print-receipt max-w-xl overflow-x-auto rounded-md border border-slate-300 bg-white p-4 font-mono text-xs leading-5 text-slate-950 shadow-sm">
-        <pre className="whitespace-pre">
-{`========================================
-========[ Treinos Geral ]===============
-========================================
-${receiptNumber.padEnd(10, " ")} - ${student.nome.toUpperCase()}
-----------------------------------------
-Marca        Placa     Data       Dia Hora  S
-----------------------------------------`}
-{printableLessons
-  .map((lesson) => {
-    const vehicleName = getVehicleName(data, lesson.veiculoId)
-      .replace("Chevrolet ", "")
-      .replace("Fiat ", "")
-      .toUpperCase()
-      .slice(0, 11)
-      .padEnd(12, " ");
-    const plate = getVehiclePlate(data, lesson.veiculoId).padEnd(8, " ");
-    const date = getReceiptDate(lesson.data).padEnd(10, " ");
-    const day = getReceiptDay(lesson.data).padEnd(3, " ");
-    return `${vehicleName}${plate}${date} ${day} ${lesson.hora} ${getReceiptStatus(
-      lesson.status,
-    )}`;
-  })
-  .join("\n")}
-{`
+      {!approvedLessons.length ? (
+        <p className="rounded-md bg-amber-50 px-3 py-2 text-sm font-bold text-amber-700">
+          Nenhuma aula aceita pelo administrador ainda.
+        </p>
+      ) : null}
 
-========================================
-=============[ Totais ]=================
-========================================
-Agendados: ${String(printableLessons.length).padStart(2, " ")}
+      <div className="print-receipt max-w-md rounded-md border border-slate-900 bg-white p-4 text-slate-950 shadow-sm">
+        <div className="border border-slate-900 p-3 text-center">
+          <p className="text-3xl font-black text-slate-800">Dirija Melhor</p>
+          <p className="mt-1 inline-block bg-slate-200 px-2 py-0.5 text-xs font-black">
+            Treinamento para habilitados
+          </p>
+          <p className="mt-4 text-sm font-semibold">Rua Conde de Bonfim, 466 Loja A - Tijuca</p>
+          <p className="text-sm font-semibold">Tel.: 4104-5480 ou 3547-0060</p>
+        </div>
 
-Legenda: A=Agendada S=Solicitada D=Desmarque P=Pendente
-Emitido em: ${new Date().toLocaleString("pt-BR")}`}
-        </pre>
+        <div className="mt-4 border border-slate-900 py-1 text-center text-sm font-semibold">
+          Marcacao de aulas
+        </div>
+        <div className="mt-2 flex flex-wrap items-center justify-between gap-2 text-xs font-semibold">
+          <p>Aluno: {student.nome}</p>
+          <p>Aulas: {approvedLessons.length}</p>
+        </div>
+
+        <table className="mt-2 w-full border-collapse text-center text-sm">
+          <thead>
+            <tr>
+              <th className="border border-slate-900 py-2 font-semibold">Data</th>
+              <th className="border border-slate-900 py-2 font-semibold">Hora</th>
+              <th className="border border-slate-900 py-2 font-semibold">Data</th>
+              <th className="border border-slate-900 py-2 font-semibold">Hora</th>
+            </tr>
+          </thead>
+          <tbody>
+            {receiptRows.map(({ first, second }, index) => (
+              <tr key={`${first?.id ?? "empty"}-${second?.id ?? "empty"}-${index}`}>
+                <td className="h-8 border border-slate-900 px-2">{first ? getReceiptDate(first.data) : ""}</td>
+                <td className="h-8 border border-slate-900 px-2">{first?.hora ?? ""}</td>
+                <td className="h-8 border border-slate-900 px-2">{second ? getReceiptDate(second.data) : ""}</td>
+                <td className="h-8 border border-slate-900 px-2">{second?.hora ?? ""}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+
+        <p className="mt-4 text-sm font-black">
+          Obs.: Desmarcar aulas com 24 hs de antecedencia.
+        </p>
       </div>
     </div>
   );

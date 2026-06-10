@@ -247,6 +247,30 @@ function Field({
   );
 }
 
+function TextAreaField({
+  label,
+  name,
+  defaultValue,
+  rows = 4,
+}: {
+  label: string;
+  name: string;
+  defaultValue?: string;
+  rows?: number;
+}) {
+  return (
+    <label className="grid gap-1.5 text-sm font-semibold text-slate-700">
+      {label}
+      <textarea
+        className="rounded-md border border-slate-200 bg-white px-3 py-2 text-sm font-normal outline-none transition focus:border-[#003B95] focus:ring-2 focus:ring-[#003B95]/15"
+        defaultValue={defaultValue}
+        name={name}
+        rows={rows}
+      />
+    </label>
+  );
+}
+
 function SelectField({
   label,
   name,
@@ -348,6 +372,11 @@ export default function AutoescolaApp({
     setSaving(false);
   }
 
+  async function handleAdminLogout() {
+    await requestJson("/api/admin-auth", { method: "DELETE" });
+    window.location.href = "/admin/login";
+  }
+
   function approveLessonRequest(lesson: Lesson) {
     save("lessons", {
       id: lesson.id,
@@ -407,7 +436,16 @@ export default function AutoescolaApp({
         nome: String(form.get("nome")),
         cpf: String(form.get("cpf")),
         email: String(form.get("email")),
+        telefone: String(form.get("telefone")),
         endereco: String(form.get("endereco")),
+        bairro: String(form.get("bairro")),
+        municipio: String(form.get("municipio")),
+        cep: String(form.get("cep")),
+        dataNascimento: String(form.get("dataNascimento")),
+        identidade: String(form.get("identidade")),
+        origem: String(form.get("origem")),
+        observacoesAluno: String(form.get("observacoesAluno")),
+        observacoesMatricula: String(form.get("observacoesMatricula")),
         cambioPreferido: String(form.get("cambioPreferido")),
         aulasContratadas: Number(form.get("aulasContratadas") || 0),
         enrollmentStatus: String(form.get("enrollmentStatus")),
@@ -455,9 +493,11 @@ export default function AutoescolaApp({
   const filteredStudents = useMemo(() => {
     const term = normalize(query);
     return data.students.filter((student) =>
-      normalize(`${student.nome} ${student.cpf} ${student.email} ${student.endereco ?? ""}`).includes(
-        term,
-      ),
+      normalize(
+        `${student.nome} ${student.cpf} ${student.email} ${student.telefone} ${
+          student.endereco ?? ""
+        } ${student.bairro ?? ""} ${student.municipio ?? ""} ${student.cep ?? ""}`,
+      ).includes(term),
     );
   }, [data.students, query]);
 
@@ -534,6 +574,7 @@ export default function AutoescolaApp({
 
         <button
           className="mt-auto flex h-12 items-center gap-3 rounded-md px-3 text-sm font-bold text-white/80 hover:bg-white/10"
+          onClick={handleAdminLogout}
           type="button"
         >
           <LogOut size={19} />
@@ -684,7 +725,7 @@ export default function AutoescolaApp({
               action={
                 <SearchBox
                   onChange={setQuery}
-                  placeholder="Pesquisar por nome, CPF, e-mail ou endereco"
+                  placeholder="Pesquisar por nome, CPF, e-mail, telefone ou endereco"
                   value={query}
                 />
               }
@@ -695,7 +736,9 @@ export default function AutoescolaApp({
                   "Nome",
                   "CPF",
                   "E-mail",
+                  "Telefone",
                   "Endereco",
+                  "Municipio",
                   "Carro",
                   "Aulas",
                   "Acesso",
@@ -710,7 +753,9 @@ export default function AutoescolaApp({
                     student.nome,
                     student.cpf,
                     student.email,
+                    student.telefone,
                     student.endereco ?? "-",
+                    student.municipio ?? "-",
                     enrollment?.cambioPreferido ?? "-",
                     enrollment?.aulasContratadas ?? "-",
                     <StudentAccessCell key="access" student={student} />,
@@ -880,7 +925,7 @@ export default function AutoescolaApp({
                 saving={saving}
               />
               <Table
-                headers={["Aluno", "E-mail", "CPF", "Carro", "Aulas", "Status", "Acoes"]}
+                headers={["Aluno", "E-mail", "CPF", "Telefone", "Carro", "Aulas", "Status", "Acoes"]}
                 rows={data.enrollments.map((enrollment) => {
                   const student = data.students.find((item) => item.id === enrollment.alunoId);
 
@@ -888,6 +933,7 @@ export default function AutoescolaApp({
                     student?.nome ?? "Aluno removido",
                     student?.email ?? "-",
                     student?.cpf ?? "-",
+                    student?.telefone ?? "-",
                     enrollment.cambioPreferido ?? "-",
                     enrollment.aulasContratadas ?? "-",
                     <StatusPill key="status">{enrollment.status}</StatusPill>,
@@ -1668,36 +1714,113 @@ function EnrollmentForm({
 
   return (
     <form onSubmit={onSubmit}>
-      <FormShell editing={Boolean(editing)} onCancel={onCancel} saving={saving}>
-        <Field defaultValue={student?.nome} label="Nome completo" name="nome" />
-        <Field defaultValue={student?.email} label="E-mail" name="email" type="email" />
-        <Field defaultValue={student?.cpf} label="CPF" name="cpf" />
-        <Field defaultValue={student?.endereco} label="Endereco" name="endereco" />
-        <SelectField
-          defaultValue={editing?.cambioPreferido ?? "manual"}
-          label="Opcao de carro"
-          name="cambioPreferido"
-          options={[
-            { label: "manual", value: "manual" },
-            { label: "automatico", value: "automatico" },
-          ]}
-        />
-        <Field
-          defaultValue={editing?.aulasContratadas ?? 0}
-          label="Aulas contratadas"
-          name="aulasContratadas"
-          type="number"
-        />
-        <SelectField
-          defaultValue={editing?.status ?? "ativo"}
-          label="Status da matricula"
-          name="enrollmentStatus"
-          options={["ativo", "pendente", "concluido", "cancelado"].map((value) => ({
-            label: value,
-            value,
-          }))}
-        />
-      </FormShell>
+      <div className="rounded-lg border-2 border-slate-900 bg-white p-4 shadow-sm">
+        <div className="mb-5 flex flex-wrap items-start justify-between gap-4 border-b border-slate-900 pb-4">
+          <div className="min-w-0 flex-1 text-center">
+            <h3 className="text-2xl font-black uppercase text-slate-950">Ficha de matricula</h3>
+          </div>
+          <div className="text-right">
+            <p className="text-2xl font-black text-[#003B95]">Dirija Melhor</p>
+            <p className="mt-1 rounded-sm bg-[#FFD000] px-2 py-1 text-xs font-black text-[#003B95]">
+              Treinamento para habilitados
+            </p>
+          </div>
+        </div>
+
+        <div className="grid gap-4">
+          <section className="grid gap-4 lg:grid-cols-4">
+            <Field defaultValue={editing?.inicio} label="Data" name="inicio" type="date" />
+            <div className="lg:col-span-3">
+              <Field defaultValue={student?.nome} label="Nome" name="nome" />
+            </div>
+            <div className="lg:col-span-4">
+              <Field defaultValue={student?.endereco} label="Endereco" name="endereco" />
+            </div>
+            <Field defaultValue={student?.bairro} label="Bairro" name="bairro" />
+            <Field defaultValue={student?.municipio} label="Municipio" name="municipio" />
+            <Field defaultValue={student?.cep} label="CEP" name="cep" />
+            <Field defaultValue={student?.telefone} label="Tel. cel." name="telefone" />
+            <div className="lg:col-span-2">
+              <Field defaultValue={student?.email} label="E-mail" name="email" type="email" />
+            </div>
+          </section>
+
+          <section className="grid gap-4 border-t border-slate-900 pt-4 lg:grid-cols-2">
+            <div className="grid gap-4">
+              <Field
+                defaultValue={student?.dataNascimento}
+                label="Data nascimento"
+                name="dataNascimento"
+                type="date"
+              />
+              <Field defaultValue={student?.identidade} label="Identidade" name="identidade" />
+              <Field defaultValue={student?.origem} label="Origem" name="origem" />
+              <Field defaultValue={student?.cpf} label="CPF" name="cpf" />
+              <TextAreaField
+                defaultValue={student?.observacoes}
+                label="Observacoes"
+                name="observacoesAluno"
+                rows={4}
+              />
+            </div>
+
+            <div className="grid gap-4">
+              <TextAreaField
+                defaultValue={editing?.observacoes}
+                label="Observacoes"
+                name="observacoesMatricula"
+                rows={8}
+              />
+              <div className="grid gap-4 sm:grid-cols-3">
+                <SelectField
+                  defaultValue={editing?.cambioPreferido ?? "manual"}
+                  label="Opcao de carro"
+                  name="cambioPreferido"
+                  options={[
+                    { label: "manual", value: "manual" },
+                    { label: "automatico", value: "automatico" },
+                  ]}
+                />
+                <Field
+                  defaultValue={editing?.aulasContratadas ?? 0}
+                  label="Aulas contratadas"
+                  name="aulasContratadas"
+                  type="number"
+                />
+                <SelectField
+                  defaultValue={editing?.status ?? "ativo"}
+                  label="Status"
+                  name="enrollmentStatus"
+                  options={["ativo", "pendente", "concluido", "cancelado"].map((value) => ({
+                    label: value,
+                    value,
+                  }))}
+                />
+              </div>
+            </div>
+          </section>
+
+          <section className="grid gap-4 border-t border-slate-900 pt-8 text-center text-xs font-semibold text-slate-700 md:grid-cols-2">
+            <div className="mx-auto w-full max-w-sm border-t border-slate-900 pt-2">
+              Assinatura do aluno
+            </div>
+            <div className="mx-auto w-full max-w-sm border-t border-slate-900 pt-2">
+              Assinatura do funcionario
+            </div>
+          </section>
+
+          <div className="flex flex-wrap gap-2 print:hidden">
+            <ActionButton icon={Plus} type="submit">
+              {saving ? "Salvando..." : editing ? "Atualizar" : "Cadastrar"}
+            </ActionButton>
+            {editing ? (
+              <ActionButton icon={Trash2} onClick={onCancel} tone="muted">
+                Cancelar
+              </ActionButton>
+            ) : null}
+          </div>
+        </div>
+      </div>
     </form>
   );
 }

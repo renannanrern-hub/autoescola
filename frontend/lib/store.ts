@@ -2,7 +2,17 @@ import { promises as fs } from "fs";
 import path from "path";
 import type { CollectionName, Database, Lesson } from "./types";
 
+type StoredItem = { id: string };
+
 const dataPath = path.join(process.cwd(), "data", "db.json");
+const collections: CollectionName[] = [
+  "students",
+  "instructors",
+  "vehicles",
+  "enrollments",
+  "lessons",
+  "payments",
+];
 
 const scaleStart = new Date("2026-06-09T00:00:00");
 const scaleEnd = new Date("2026-06-30T00:00:00");
@@ -223,24 +233,117 @@ async function ensureDataFile() {
   }
 }
 
+function getSupabaseConfig() {
+  const url = process.env.SUPABASE_URL;
+  const key = process.env.SUPABASE_SECRET_KEY;
+
+  if (!url || !key) {
+    return null;
+  }
+
+  return {
+    key,
+    url: url.replace(/\/$/, ""),
+  };
+}
+
+async function supabaseRequest<T>(
+  table: CollectionName,
+  options: {
+    body?: unknown;
+    method: "DELETE" | "GET" | "POST";
+    query?: string;
+  },
+) {
+  const config = getSupabaseConfig();
+
+  if (!config) {
+    throw new Error("Supabase nao configurado.");
+  }
+
+  const response = await fetch(`${config.url}/rest/v1/${table}${options.query ?? ""}`, {
+    body: options.body ? JSON.stringify(options.body) : undefined,
+    headers: {
+      apikey: config.key,
+      Authorization: `Bearer ${config.key}`,
+      "Content-Type": "application/json",
+      Prefer: "return=representation,resolution=merge-duplicates",
+    },
+    method: options.method,
+  });
+
+  if (!response.ok) {
+    const text = await response.text();
+    throw new Error(`Erro Supabase ${response.status} em ${table}: ${text}`);
+  }
+
+  if (response.status === 204) {
+    return null as T;
+  }
+
+  return (await response.json()) as T;
+}
+
+async function readSupabaseCollection<T>(collection: CollectionName) {
+  const rows = await supabaseRequest<Array<{ data: T }>>(collection, {
+    method: "GET",
+    query: "?select=data&order=created_at.asc",
+  });
+
+  return rows.map((row) => row.data);
+}
+
+async function writeSupabaseCollection(collection: CollectionName, items: StoredItem[]) {
+  await supabaseRequest(collection, {
+    method: "DELETE",
+    query: "?id=not.is.null",
+  });
+
+  if (!items.length) {
+    return;
+  }
+
+  await supabaseRequest(collection, {
+    body: items.map((item) => ({
+      id: item.id,
+      data: item,
+    })),
+    method: "POST",
+    query: "?on_conflict=id",
+  });
+}
+
 export async function readDatabase(): Promise<Database> {
+  if (getSupabaseConfig()) {
+    return {
+      students: await readSupabaseCollection("students"),
+      instructors: await readSupabaseCollection("instructors"),
+      vehicles: await readSupabaseCollection("vehicles"),
+      enrollments: await readSupabaseCollection("enrollments"),
+      lessons: await readSupabaseCollection("lessons"),
+      payments: await readSupabaseCollection("payments"),
+    };
+  }
+
   await ensureDataFile();
   const file = await fs.readFile(dataPath, "utf8");
   return JSON.parse(file) as Database;
 }
 
 export async function writeDatabase(database: Database) {
+  if (getSupabaseConfig()) {
+    await Promise.all(
+      collections.map((collection) =>
+        writeSupabaseCollection(collection, database[collection] as StoredItem[]),
+      ),
+    );
+    return;
+  }
+
   await ensureDataFile();
   await fs.writeFile(dataPath, JSON.stringify(database, null, 2), "utf8");
 }
 
 export function isCollectionName(value: string): value is CollectionName {
-  return [
-    "students",
-    "instructors",
-    "vehicles",
-    "enrollments",
-    "lessons",
-    "payments",
-  ].includes(value);
+  return collections.includes(value as CollectionName);
 }

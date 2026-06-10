@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "supabase:seed": "node scripts/seed-supabase.mjs"
   },
   "dependencies": {
     "lucide-react": "^1.17.0",

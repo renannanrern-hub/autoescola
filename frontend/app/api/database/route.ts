@@ -1,8 +1,13 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
+import { isAdminRequest } from "@/lib/admin-auth";
 import { readDatabase } from "@/lib/store";
 import type { DashboardStats } from "@/lib/types";
 
-export async function GET() {
+export async function GET(request: NextRequest) {
+  if (!isAdminRequest(request)) {
+    return NextResponse.json({ message: "Acesso administrativo obrigatorio." }, { status: 401 });
+  }
+
   const database = await readDatabase();
   const today = new Date().toISOString().slice(0, 10);
 

@@ -1,36 +1,88 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Sistema Dirija Melhor
 
-## Getting Started
+Aplicacao Next.js para administrar alunos, matriculas, escala de aulas, solicitacoes do aluno, comprovantes e financeiro.
 
-First, run the development server:
+## Requisitos
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- Node.js 20+
+- npm
+
+## Configuracao
+
+Crie um arquivo `.env.local` dentro da pasta `frontend` usando o modelo abaixo:
+
+```env
+SUPABASE_URL=https://seu-projeto.supabase.co
+SUPABASE_SECRET_KEY=sb_secret_sua_chave
+ADMIN_EMAIL=admin@dirijamelhor.com
+ADMIN_PASSWORD=troque-essa-senha
+ADMIN_SESSION_SECRET=troque-esse-segredo-grande
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Para teste local, se essas variaveis nao existirem, o sistema usa:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```txt
+E-mail: admin@dirijamelhor.com
+Senha: admin123
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Rodar em desenvolvimento
 
-## Learn More
+```bash
+npm install
+npm run dev
+```
 
-To learn more about Next.js, take a look at the following resources:
+Abra:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Administrador: http://localhost:3000/admin/login
+- Aluno: http://localhost:3000/alunos
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Build de producao local
 
-## Deploy on Vercel
+```bash
+npm run build
+npm run start
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Supabase
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. Crie um projeto no Supabase.
+2. No SQL Editor do Supabase, execute o arquivo `supabase/schema.sql`.
+3. Configure `.env.local` com `SUPABASE_URL` e `SUPABASE_SECRET_KEY`.
+4. Importe os dados locais:
+
+```bash
+npm run supabase:seed
+```
+
+Depois disso, o app passa a ler e escrever no Supabase. Se as variaveis `SUPABASE_URL` e `SUPABASE_SECRET_KEY` nao existirem, o app usa `data/db.json` para desenvolvimento local.
+
+## Vercel
+
+Ao importar o projeto na Vercel:
+
+- Root directory: `frontend`
+- Build command: `npm run build`
+- Environment Variables:
+  - `SUPABASE_URL`
+  - `SUPABASE_SECRET_KEY`
+  - `ADMIN_EMAIL`
+  - `ADMIN_PASSWORD`
+  - `ADMIN_SESSION_SECRET`
+
+## Fluxo principal
+
+1. O administrador entra por `/admin/login`.
+2. A aba `Matriculas` cadastra a ficha completa do aluno.
+3. Os dados cadastrados aparecem na aba `Alunos` apenas para consulta.
+4. O aluno entra por `/alunos` com e-mail e senha inicial.
+5. O aluno solicita aulas pela escala.
+6. O administrador aprova ou recusa na agenda.
+7. O comprovante do aluno aparece somente para aulas aceitas.
+
+## Dados
+
+Em desenvolvimento sem Supabase, os dados ficam em `data/db.json`.
+
+Em producao na Vercel, use Supabase para persistencia.
