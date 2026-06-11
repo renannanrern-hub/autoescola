@@ -294,11 +294,6 @@ async function readSupabaseCollection<T>(collection: CollectionName) {
 }
 
 async function writeSupabaseCollection(collection: CollectionName, items: StoredItem[]) {
-  await supabaseRequest(collection, {
-    method: "DELETE",
-    query: "?id=not.is.null",
-  });
-
   if (!items.length) {
     return;
   }
@@ -311,6 +306,51 @@ async function writeSupabaseCollection(collection: CollectionName, items: Stored
     method: "POST",
     query: "?on_conflict=id",
   });
+}
+
+export async function upsertCollectionItem(collection: CollectionName, item: StoredItem) {
+  if (getSupabaseConfig()) {
+    await supabaseRequest(collection, {
+      body: [
+        {
+          id: item.id,
+          data: item,
+        },
+      ],
+      method: "POST",
+      query: "?on_conflict=id",
+    });
+    return;
+  }
+
+  const database = await readDatabase();
+  const items = database[collection] as StoredItem[];
+  const index = items.findIndex((current) => current.id === item.id);
+
+  if (index >= 0) {
+    items[index] = item;
+  } else {
+    items.unshift(item);
+  }
+
+  await writeDatabase(database);
+}
+
+export async function deleteCollectionItem(collection: CollectionName, id: string) {
+  if (getSupabaseConfig()) {
+    await supabaseRequest(collection, {
+      method: "DELETE",
+      query: `?id=eq.${encodeURIComponent(id)}`,
+    });
+    return;
+  }
+
+  const database = await readDatabase();
+  const items = database[collection] as StoredItem[];
+  const nextItems = items.filter((item) => item.id !== id);
+
+  (database[collection] as StoredItem[]).splice(0, items.length, ...nextItems);
+  await writeDatabase(database);
 }
 
 export async function readDatabase(): Promise<Database> {

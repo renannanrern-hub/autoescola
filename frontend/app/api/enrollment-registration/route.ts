@@ -1,7 +1,7 @@
 import { randomUUID } from "crypto";
 import { NextRequest, NextResponse } from "next/server";
 import { isAdminRequest } from "@/lib/admin-auth";
-import { readDatabase, writeDatabase } from "@/lib/store";
+import { readDatabase, upsertCollectionItem } from "@/lib/store";
 
 export async function POST(request: NextRequest) {
   if (!isAdminRequest(request)) {
@@ -58,13 +58,6 @@ export async function POST(request: NextRequest) {
     id: studentId,
   };
 
-  if (student) {
-    const studentIndex = database.students.findIndex((item) => item.id === student.id);
-    database.students[studentIndex] = nextStudent;
-  } else {
-    database.students.unshift(nextStudent);
-  }
-
   const nextEnrollment = {
     id: enrollmentId || randomUUID(),
     alunoId: studentId,
@@ -81,14 +74,10 @@ export async function POST(request: NextRequest) {
       | "cancelado",
   };
 
-  if (existingEnrollment) {
-    const enrollmentIndex = database.enrollments.findIndex((item) => item.id === existingEnrollment.id);
-    database.enrollments[enrollmentIndex] = nextEnrollment;
-  } else {
-    database.enrollments.unshift(nextEnrollment);
-  }
-
-  await writeDatabase(database);
+  await Promise.all([
+    upsertCollectionItem("students", nextStudent),
+    upsertCollectionItem("enrollments", nextEnrollment),
+  ]);
 
   return NextResponse.json({ enrollment: nextEnrollment, student: nextStudent });
 }

@@ -1,7 +1,12 @@
 import { randomUUID } from "crypto";
 import { NextRequest, NextResponse } from "next/server";
 import { isAdminRequest } from "@/lib/admin-auth";
-import { isCollectionName, readDatabase, writeDatabase } from "@/lib/store";
+import {
+  deleteCollectionItem,
+  isCollectionName,
+  readDatabase,
+  upsertCollectionItem,
+} from "@/lib/store";
 
 type Params = {
   params: Promise<{
@@ -21,14 +26,12 @@ export async function POST(request: NextRequest, { params }: Params) {
   }
 
   const payload = await request.json();
-  const database = await readDatabase();
   const item = {
     ...payload,
     id: payload.id || randomUUID(),
   };
 
-  (database[collection] as Array<Record<string, unknown>>).unshift(item);
-  await writeDatabase(database);
+  await upsertCollectionItem(collection, item);
 
   return NextResponse.json(item, { status: 201 });
 }
@@ -59,7 +62,7 @@ export async function PUT(request: NextRequest, { params }: Params) {
   }
 
   items[index] = { ...items[index], ...payload };
-  await writeDatabase(database);
+  await upsertCollectionItem(collection, items[index] as { id: string });
 
   return NextResponse.json(items[index]);
 }
@@ -80,21 +83,15 @@ export async function DELETE(request: NextRequest, { params }: Params) {
   if (!id) {
     return NextResponse.json({ error: "ID obrigatorio." }, { status: 400 });
   }
-
   const database = await readDatabase();
   const items = database[collection] as Array<Record<string, unknown>>;
-  const nextItems = items.filter((item) => item.id !== id);
+  const exists = items.some((item) => item.id === id);
 
-  if (nextItems.length === items.length) {
+  if (!exists) {
     return NextResponse.json({ error: "Registro nao encontrado." }, { status: 404 });
   }
 
-  (database[collection] as Array<Record<string, unknown>>).splice(
-    0,
-    items.length,
-    ...nextItems,
-  );
-  await writeDatabase(database);
+  await deleteCollectionItem(collection, id);
 
   return NextResponse.json({ ok: true });
 }

@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { readDatabase, writeDatabase } from "@/lib/store";
+import { readDatabase, upsertCollectionItem } from "@/lib/store";
 
 type LessonAction = "cancel-request" | "request" | "request-cancel";
 
@@ -109,7 +109,7 @@ export async function POST(request: Request) {
     lesson.status = "cancelamento_solicitado";
   }
 
-  await writeDatabase(database);
+  await upsertCollectionItem("lessons", lesson);
 
   return NextResponse.json({ ok: true });
 }
